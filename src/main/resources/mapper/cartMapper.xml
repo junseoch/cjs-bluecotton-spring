@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.bluecotton.mapper.CartMapper">
+
+    <insert id="insert" parameterType="CartVO">
+        INSERT INTO TBL_CART(ID, CART_QUANTITY, MEMBER_ID, PRODUCT_ID)
+        VALUES(SEQ_CART.NEXTVAL, #{quantity}, #{memberId}, #{productId})
+    </insert>
+
+
+
+    <select id="selectByMemberId" parameterType="Long" resultType="com.app.bluecotton.domain.dto.CartDTO">
+        SELECT TBC.ID, TBM.MEMBER_ID , CART_QUANTITY, PRODUCT_ID, PRODUCT_NAME AS 상품 이름, PRODUCT_PRICE AS 상품 가격, PRODUCT_PURCHASE_TYPE AS 상품 구매 타입
+        FROM TBL_CART TBC
+        JOIN TBL_PRODUCT TBP
+        ON TBP.ID = TBC.PRODUCT_ID
+        JOIN TBL_MEMBER TBM
+        ON TBM.ID = TBC.MEMBER_ID
+        WHERE TBM.ID = #{memberId}
+        ORDER BY TBC.ID DESC
+    </select>
+
+    <update id="updatePlus" parameterType="CartVO">
+        UPDATE TBL_CART
+        SET CART_QUANTITY = CART_QUANTITY + #{quantity}
+        WHERE MEMBER_ID =#{memberId} AND PRODUCT_ID=#{productId}
+    </update>
+
+    <update id="updateMinus" parameterType="CartVO">
+        UPDATE TBL_CART
+        SET CART_QUANTITY = CART_QUANTITY - #{quantity}
+        WHERE MEMBER_ID =#{memberId} AND PRODUCT_ID=#{productId}
+    </update>
+
+    <delete id="delete" parameterType="Long">
+        DELETE FROM TBL_CART
+        WHERE MEMBER_ID = #{memberId} AND PRODUCT_ID = #{productId}
+    </delete>
+</mapper>
