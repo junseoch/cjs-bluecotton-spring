@@ -14,14 +14,11 @@
 
         <!-- post -->
         <typeAlias type="com.app.bluecotton.domain.vo.post.PostVO" alias="PostVO" />
-        <typeAlias type="com.app.bluecotton.domain.vo.post.PostLikeVO" alias="PostLikeVO" />
         <typeAlias type="com.app.bluecotton.domain.vo.post.PostImageVO" alias="PostImageVO" />
         <typeAlias type="com.app.bluecotton.domain.vo.post.PostReportVO" alias="PostReportVO" />
         <typeAlias type="com.app.bluecotton.domain.vo.post.PostCommentVO" alias="PostCommentVO" />
-        <typeAlias type="com.app.bluecotton.domain.vo.post.PostCommentLikeVO" alias="PostCommentLikeVO" />
         <typeAlias type="com.app.bluecotton.domain.vo.post.PostCommentReportVO" alias="PostCommentReportVO" />
         <typeAlias type="com.app.bluecotton.domain.vo.post.PostReplyVO" alias="PostReplyVO" />
-        <typeAlias type="com.app.bluecotton.domain.vo.post.PostReplyLikeVO" alias="PostReplyLikeVO" />
         <typeAlias type="com.app.bluecotton.domain.vo.post.PostReplyReportVO" alias="PostReplyReportVO" />
         <typeAlias type="com.app.bluecotton.domain.vo.post.PostRecentVO" alias="PostRecentVO" />
         <typeAlias type="com.app.bluecotton.domain.vo.post.PostDraftVO" alias="PostDraftVO" />
