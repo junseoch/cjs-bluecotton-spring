@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.bluecotton.mapper.PostMapper">
+    <!-- 오늘의 솜 메인페이지 게시글 리스트 조회 (+ 좋아요 여부 포함) -->
+    <select id="select" parameterType="map"
+            resultType="com.app.bluecotton.domain.dto.post.PostMainDTO">
+
+        SELECT
+        TBP.ID AS POST_ID,
+        TBS.SOM_CATEGORY,
+        TRUNC(TRUNC(SYSDATE) - TRUNC(TBS.SOM_START_DATE)) + 1 AS POST_SOM_DAY,
+        TBP.POST_TITLE,
+        TBP.POST_CONTENT,
+        TBM.MEMBER_NICKNAME,
+        NVL(TBMP.MEMBER_PROFILE_PATH || TBMP.MEMBER_PROFILE_NAME, '/images/default_profile.png') AS MEMBER_PROFILE_URL,
+        TBP.POST_CREATE_AT,
+        TBP.POST_READ_COUNT,
+        NVL(TPI.POST_IMAGE_URL, '/upload/default_post.png') AS POST_IMAGE_URL,
+
+        (SELECT COUNT(*) FROM TBL_POST_LIKE L WHERE L.POST_ID = TBP.ID) AS POST_LIKE_COUNT,
+        (
+        SELECT COUNT(*) FROM TBL_POST_COMMENT C WHERE C.POST_ID = TBP.ID
+        ) +
+        (
+        SELECT COUNT(*) FROM TBL_POST_REPLY R
+        WHERE R.POST_COMMENT_ID IN (
+        SELECT ID FROM TBL_POST_COMMENT WHERE POST_ID = TBP.ID
+        )
+        ) AS POST_COMMENT_COUNT,
+
+        CASE
+        WHEN #{memberId} IS NOT NULL AND EXISTS (
+        SELECT 1 FROM TBL_POST_LIKE L
+        WHERE L.POST_ID = TBP.ID
+        AND L.MEMBER_ID = #{memberId}
+        ) THEN 1
+        ELSE 0
+        END AS POST_IS_LIKE
+
+        FROM TBL_SOM TBS
+        JOIN TBL_POST TBP ON TBS.ID = TBP.SOM_ID
+        LEFT JOIN (
+        SELECT POST_ID, MIN(POST_IMAGE_PATH || POST_IMAGE_NAME) AS POST_IMAGE_URL
+        FROM TBL_POST_IMAGE
+        GROUP BY POST_ID
+        ) TPI ON TBP.ID = TPI.POST_ID
+        JOIN TBL_MEMBER TBM ON TBM.ID = TBP.MEMBER_ID
+        LEFT JOIN TBL_MEMBER_PROFILE TBMP ON TBM.ID = TBMP.MEMBER_ID
+
+        WHERE 1=1
+        <if test="somCategory != null and somCategory != ''">
+            AND UPPER(TBS.SOM_CATEGORY) = UPPER(#{somCategory})
+        </if>
+
+        <choose>
+            <when test="orderType == 'view'">
+                ORDER BY TBP.POST_READ_COUNT DESC, TBP.ID DESC
+            </when>
+            <when test="orderType == 'popular'">
+                ORDER BY POST_LIKE_COUNT DESC, TBP.ID DESC
+            </when>
+            <when test="orderType == 'comment'">
+                ORDER BY POST_COMMENT_COUNT DESC, TBP.ID DESC
+            </when>
+            <otherwise>
+                ORDER BY TBP.POST_CREATE_AT DESC, TBP.ID DESC
+            </otherwise>
+        </choose>
+
+    </select>
+
+
+
+    <insert id="insert">
+        MY INSERT QUERY
+    </insert>
+
+    <update id="update">
+        MY UPDATE QUERY
+    </update>
+
+    <delete id="delete">
+        MY DELETE QUERY
+    </delete>
+
+</mapper>
