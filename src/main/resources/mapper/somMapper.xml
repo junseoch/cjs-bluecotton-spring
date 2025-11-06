@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.bluecotton.mapper.SomMapper">
+    <!--  솜 등록  -->
+    <insert id="insert" parameterType="SomVO">
+        INSERT INTO TBL_SOM(ID, SOM_TITLE, SOM_CATEGORY, SOM_ADDRESS, SOM_START_DATE, SOM_END_DATE, SOM_CONTENT, MEMBER_ID)
+        VALUES(SEQ_SOM.NEXTVAL, #{somTitle}, #{somCategory}, #{somAddress}, #{somStartDate}, #{somEndDate}, #{somContent}, #{memberId})
+    </insert>
+    <!--  솜 상세 조회  -->
+    <select id="selectById" parameterType="Long" resultType="SomVO">
+        SELECT ID, SOM_TITLE, SOM_CATEGORY, SOM_ADDRESS, SOM_START_DATE, SOM_END_DATE, SOM_LIKE, SOM_CONTENT, MEMBER_ID
+        FROM TBL_SOM
+        WHERE ID = #{id}
+    </select>
+    <!--  솜 카테고리별 조회  -->
+    <select id="selectSomByCategory" parameterType="String" resultType="SomVO">
+        SELECT ID, SOM_TITLE, SOM_CATEGORY, SOM_ADDRESS, SOM_START_DATE, SOM_END_DATE, SOM_LIKE, SOM_CONTENT, MEMBER_ID
+        FROM TBL_SOM
+        WHERE SOM_CATEGORY  = #{somCategory}
+    </select>
+    <!--  솜 전체 조회  -->
+    <select id="selectAll" resultType="SomVO">
+        SELECT ID, SOM_TITLE, SOM_CATEGORY, SOM_ADDRESS, SOM_START_DATE, SOM_END_DATE, SOM_LIKE, SOM_CONTENT, MEMBER_ID
+        FROM TBL_SOM
+    </select>
+    <!--  솜 전체 주소 조회  -->
+    <select id="selectAllAddress" resultType="String">
+        SELECT SOM_ADDRESS
+        FROM TBL_SOM
+    </select>
+    <!--  솜 좋아요  -->
+    <update id="updateLike" parameterType="Long">
+        UPDATE TBL_SOM
+        SET SOM_LIKE = SOM_LIKE + 1
+        WHERE ID = #{id}
+    </update>
+    <!--  솜 삭제  -->
+    <delete id="delete" parameterType="Long">
+        DELETE FROM TBL_SOM
+        WHERE ID = #{id}
+    </delete>
+</mapper>
+

@@ -1,6 +1,7 @@
 package com.app.bluecotton.api.publicapi;
 
 import com.app.bluecotton.domain.dto.ApiResponseDTO;
+import com.app.bluecotton.domain.dto.MemberResponseDTO;
 import com.app.bluecotton.domain.vo.member.MemberVO;
 import com.app.bluecotton.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Slf4j
