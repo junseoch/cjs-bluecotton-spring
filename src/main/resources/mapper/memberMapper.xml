@@ -7,14 +7,14 @@
         FROM TBL_MEMBER
     </select>
 
-    <select id="existByMemberEmail" parameterType="String" resultType="_boolean">
-        SELECT
-        ID, MEMBER_NAME, MEMBER_NICKNAME, MEMBER_EMAIL, MEMBER_PASSWORD,
-        MEMBER_ADDRESS, MEMBER_PICTURE_PATH, MEMBER_PICTURE_NAME,
-        MEMBER_GENDER, MEMBER_BIRTH, MEMBER_CANDY, MEMBER_RANK, MEMBER_PROVIDER, MEMBER_PHONE
-        FROM TBL_MEMBER
-        WHERE ID = #{id}
-    </select>
+<!--    <select id="existByMemberEmail" parameterType="String" resultType="_boolean">-->
+<!--        SELECT-->
+<!--        ID, MEMBER_NAME, MEMBER_NICKNAME, MEMBER_EMAIL, MEMBER_PASSWORD,-->
+<!--        MEMBER_ADDRESS, MEMBER_PICTURE_PATH, MEMBER_PICTURE_NAME,-->
+<!--        MEMBER_GENDER, MEMBER_BIRTH, MEMBER_CANDY, MEMBER_RANK, MEMBER_PROVIDER, MEMBER_PHONE-->
+<!--        FROM TBL_MEMBER-->
+<!--        WHERE ID = #{id}-->
+<!--    </select>-->
 
     <!-- 이메일로 회원 ID 조회 -->
     <select id="selectIdByEmail" parameterType="String" resultType="Long">

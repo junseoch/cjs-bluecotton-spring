@@ -7,5 +7,5 @@ public class CartVO {
     private Long id;
     private Long memberId;
     private Long productId;
-    private Integer quantity;
+    private int quantity;
 }

@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/cart")
+@RequestMapping("/cart/*")
 public class CartApi {
 
     private final CartService cartService;
@@ -48,7 +48,8 @@ public class CartApi {
     }
 
     @DeleteMapping("delete")
-    public ResponseEntity<ApiResponseDTO> deleteCart(@RequestParam Long memberId, Long productId) {
+    public ResponseEntity<ApiResponseDTO> deleteCart(@RequestParam Long memberId,
+                                                     @RequestParam Long productId) {
         cartService.deleteCart(memberId, productId);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponseDTO.of("상품 삭제 성공"));
     }

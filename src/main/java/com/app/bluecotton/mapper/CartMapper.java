@@ -11,22 +11,18 @@ import java.util.Optional;
 @Mapper
 public interface CartMapper {
 
-    //장바구니에 상품 담기
-    public void insert(CartVO cartVO);
+    void insert(CartVO cartVO);
 
-    //장바구니 목록
-    public List<CartResponseDTO> selectByMemberId(@Param("memberId") Long memberId);
+    List<CartResponseDTO> selectByMemberId(@Param("memberId") Long memberId);
 
-    //장바구니 상품 수량 조회
-    public Optional<CartVO> selectQuantity(@Param("memberId") Long memberId, @Param("productId") Long productId);
+    // int 또는 Integer로 수량만 받도록 변경
+    Optional<Integer> selectQuantity(@Param("memberId") Long memberId,
+                                     @Param("productId") Long productId);
 
-    //장바구니 수량 수정(+)
     public void updatePlus(CartVO cartVO);
 
-    //장바구니 수정(-)
-    public void updateMinus(CartVO cartVO);
+    int updateMinus(CartVO cartVO);
 
-    //장바구니에 있는 상품 삭제
     public void delete(@Param("memberId") Long memberId, @Param("productId") Long productId);
-
 }
+

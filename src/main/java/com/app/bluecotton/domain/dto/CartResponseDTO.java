@@ -11,7 +11,7 @@ public class CartResponseDTO {
     private Long productId;
     private Integer quantity;
     private String productName;
-    private String productPrice;
+    private Integer productPrice;
     private String productPurchaseType;
     private Integer productStock;
 }

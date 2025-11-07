@@ -15,34 +15,27 @@ public class CartDAO {
 
     private final CartMapper cartMapper;
 
-    //장바구니에 상품 추가
-    public void add(CartVO  cartVO) {
+    public void add(CartVO cartVO) {
         cartMapper.insert(cartVO);
     }
 
-    // 상품 조회
-    public List<CartResponseDTO> selectAllCart(Long  memberId) {
+    public List<CartResponseDTO> selectAllCart(Long memberId) {
         return cartMapper.selectByMemberId(memberId);
     }
 
-    public Optional<CartVO> selectQuantity(Long memberId, Long productId) {
+    public Optional<Integer> selectQuantity(Long memberId, Long productId) {
         return cartMapper.selectQuantity(memberId, productId);
     }
 
-    // 상품 추가
     public void increaseProduct(CartVO cartVO) {
         cartMapper.updatePlus(cartVO);
     }
 
-    //상품 감소
-    public void decreaseProduct(CartVO cartVO) {
-        cartMapper.updateMinus(cartVO);
+    public int decreaseProduct(CartVO cartVO) {
+        return cartMapper.updateMinus(cartVO);
     }
 
-    // 장바구니에서 상품 삭제
     public void deleteProduct(Long memberId, Long productId) {
         cartMapper.delete(memberId, productId);
     }
-
-
 }
