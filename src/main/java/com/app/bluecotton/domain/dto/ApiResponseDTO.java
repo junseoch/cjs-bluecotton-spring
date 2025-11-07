@@ -17,7 +17,7 @@ public class ApiResponseDTO<T> {
     }
 
     public static <T> ApiResponseDTO<T> of(String message) {
-        return new ApiResponseDTO<>(message);
+        return new ApiResponseDTO<>(message, null);
     }
 
     public static <T> ApiResponseDTO<T> of(String message, T data) {

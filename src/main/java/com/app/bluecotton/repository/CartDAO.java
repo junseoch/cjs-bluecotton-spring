@@ -1,12 +1,13 @@
 package com.app.bluecotton.repository;
 
-import com.app.bluecotton.domain.dto.CartDTO;
+import com.app.bluecotton.domain.dto.CartResponseDTO;
 import com.app.bluecotton.domain.vo.shop.CartVO;
 import com.app.bluecotton.mapper.CartMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -20,8 +21,12 @@ public class CartDAO {
     }
 
     // 상품 조회
-    public List<CartDTO> selectAllCart(Long  memberId) {
+    public List<CartResponseDTO> selectAllCart(Long  memberId) {
         return cartMapper.selectByMemberId(memberId);
+    }
+
+    public Optional<CartVO> selectQuantity(Long memberId, Long productId) {
+        return cartMapper.selectQuantity(memberId, productId);
     }
 
     // 상품 추가

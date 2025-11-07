@@ -5,9 +5,9 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CartDTO {
+public class CartResponseDTO {
     private Long id;
-    private Long userId;
+    private Long memberId;
     private Long productId;
     private Integer quantity;
     private String productName;

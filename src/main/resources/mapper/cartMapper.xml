@@ -9,8 +9,16 @@
 
 
 
-    <select id="selectByMemberId" parameterType="Long" resultType="com.app.bluecotton.domain.dto.CartDTO">
-        SELECT TBC.ID, TBM.MEMBER_ID , CART_QUANTITY, PRODUCT_ID, PRODUCT_NAME AS 상품 이름, PRODUCT_PRICE AS 상품 가격, PRODUCT_PURCHASE_TYPE AS 상품 구매 타입
+    <select id="selectByMemberId" parameterType="Long" resultType="com.app.bluecotton.domain.dto.CartResponseDTO">
+        SELECT
+        TBC.ID AS id,
+        TBC.MEMBER_ID AS memberId,
+        CART_QUANTITY AS quantity,
+        PRODUCT_STOCK AS productStock,
+        TBC.PRODUCT_ID AS productId,
+        TBP.PRODUCT_NAME AS productName,
+        TBP.PRODUCT_PRICE AS productPrice,
+        TBP.PRODUCT_PURCHASE_TYPE AS productPurchaseType
         FROM TBL_CART TBC
         JOIN TBL_PRODUCT TBP
         ON TBP.ID = TBC.PRODUCT_ID
@@ -18,6 +26,12 @@
         ON TBM.ID = TBC.MEMBER_ID
         WHERE TBM.ID = #{memberId}
         ORDER BY TBC.ID DESC
+    </select>
+
+    <select id="selectQuantity" parameterType="Long" resultType="CartVO">
+        SELECT CART_QUANTITY
+        FROM TBL_CART
+        WHERE MEMBER_ID = #{memberId} AND PRODUCT_ID = #{productId}
     </select>
 
     <update id="updatePlus" parameterType="CartVO">
