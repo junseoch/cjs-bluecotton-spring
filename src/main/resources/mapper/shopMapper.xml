@@ -144,6 +144,71 @@
         FROM TBL_PRODUCT TBP
         WHERE TBP.ID = #{id}
     </select>
+    
+    
+    <select id="selectProductReviewDetail" parameterType="map" resultType="com.app.bluecotton.domain.dto.ProductReviewDetailResponseDTO">
+        SELECT
+        TBPR.ID,
+        TBPR.PRODUCT_REVIEW_RATING,
+        TBPR.PRODUCT_REVIEW_CONTENT,
+        TO_CHAR(TBPR.PRODUCT_REVIEW_CREATE_AT, 'YYYY.MM.DD') AS PRODUCT_REVIEW_DATE ,
+
+        (SELECT TBM.MEMBER_NICKNAME
+        FROM TBL_MEMBER TBM
+        WHERE TBM.ID = TBPR.MEMBER_ID) AS USER_NICK_NAME,
+
+        (SELECT LISTAGG(TBPRI.PRODUCT_REVIEW_IMAGE_PATH || TBPRI.PRODUCT_REVIEW_IMAGE_NAME, '|')
+        WITHIN GROUP (ORDER BY TBPRI.ID)
+        FROM TBL_PRODUCT_REVIEW_IMAGE TBPRI
+        WHERE TBPRI.PRODUCT_REVIEW_ID = TBPR.ID
+        ) AS PRODUCT_REVIEW_IMAGE_URLS,
+
+        (SELECT MEMBER_PROFILE_PATH || MEMBER_PROFILE_NAME
+        FROM TBL_MEMBER_PROFILE TBMP
+        WHERE TBMP.MEMBER_ID = TBPR.MEMBER_ID
+        ) AS MEMBER_PROFILE_URL
+
+        FROM TBL_PRODUCT_REVIEW TBPR
+        WHERE TBPR.PRODUCT_ID = #{id}
+
+        <if test="type == 'photo'">
+            AND EXISTS (
+            SELECT 1
+            FROM TBL_PRODUCT_REVIEW_IMAGE TBPRI
+            WHERE TBPRI.PRODUCT_REVIEW_ID = TBPR.ID
+            )
+        </if>
+
+        ORDER BY
+        <choose>
+            <when test="sort == 'ratingHigh'">
+                TBPR.PRODUCT_REVIEW_RATING DESC, TBPR.ID DESC
+            </when>
+            <when test="sort == 'ratingLow'">
+                TBPR.PRODUCT_REVIEW_RATING ASC, TBPR.ID DESC
+            </when>
+            <otherwise>
+                TBPR.ID DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectProductReviewStats" parameterType="Long" resultType="com.app.bluecotton.domain.dto.ProductReviewStatsResponseDTO">
+
+        SELECT
+        NVL(ROUND(AVG(PRODUCT_REVIEW_RATING), 1), 0.0) AS AVG_SCORE,
+        COUNT(*) AS TOTAL_COUNT,
+        COUNT(CASE WHEN PRODUCT_REVIEW_RATING = 5 THEN 1 END) AS COUNT5,
+        COUNT(CASE WHEN PRODUCT_REVIEW_RATING = 4 THEN 1 END) AS COUNT4,
+        COUNT(CASE WHEN PRODUCT_REVIEW_RATING = 3 THEN 1 END) AS COUNT3,
+        COUNT(CASE WHEN PRODUCT_REVIEW_RATING = 2 THEN 1 END) AS COUNT2,
+        COUNT(CASE WHEN PRODUCT_REVIEW_RATING = 1 THEN 1 END) AS COUNT1
+        FROM TBL_PRODUCT_REVIEW
+        WHERE PRODUCT_ID = #{id}
+    </select>
 
 
 </mapper>
+
+
+
