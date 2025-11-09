@@ -47,8 +47,14 @@ public interface PostMapper {
 //    최근본 삭제
     void deleteRecentsByPostId(Long postId);
 
-//    임시저장 등록
+    //    임시저장 등록
     void insertDraft(PostDraftVO postDraftVO);
+
+    //    임시저장 조회 (이어쓰기용)
+    PostDraftVO selectDraftById(Long id);
+
+    //    임시저장 삭제 (마이페이지 or 작성완료 후 삭제용)
+    void deleteDraftById(Long id);
 
 //    회원이 참여 중인 솜 카테고리 조회 (드롭다운용)
     List<SomCategoryDTO> findJoinedCategories(Long memberId);
@@ -60,13 +66,22 @@ public interface PostMapper {
     void update(PostVO postVO);
 
     // 게시글 상세 조회
-    PostDetailDTO selectPostDetailById(Long postId);
+    PostDetailDTO selectPostDetailByIdWithLike(@Param("postId") Long postId, @Param("memberId") Long memberId);
 
-    // 게시글 댓글 조회
-    List<PostCommentDTO> selectCommentsByPostId(Long postId);
+    // 댓글 / 대댓글 조회
+    List<PostCommentDTO> selectCommentsByPostIdWithLike(@Param("postId") Long postId, @Param("memberId") Long memberId);
+    List<PostReplyDTO> selectRepliesByCommentIdWithLike(@Param("commentId") Long commentId, @Param("memberId") Long memberId);
 
-    // 게시글 답글 조회
-    List<PostReplyDTO> selectRepliesByCommentId(Long commentId);
+    // 좋아요 토글 / 여부 체크
+    int existsCommentLike(@Param("commentId") Long commentId, @Param("memberId") Long memberId);
+    int existsReplyLike(@Param("replyId") Long replyId, @Param("memberId") Long memberId);
+
+    void insertCommentLike(@Param("commentId") Long commentId, @Param("memberId") Long memberId);
+    void deleteCommentLike(@Param("commentId") Long commentId, @Param("memberId") Long memberId);
+
+    void insertReplyLike(@Param("replyId") Long replyId, @Param("memberId") Long memberId);
+    void deleteReplyLike(@Param("replyId") Long replyId, @Param("memberId") Long memberId);
+
 
     // 조회수 + 1(상세 조회 시)
     void updateReadCount(Long postId);
