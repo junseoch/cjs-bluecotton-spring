@@ -39,6 +39,21 @@ public class ShopDAO {
         return shopMapper.selectProductReviewStats(id);
     }
 
+    // 마이페이지(샵) 찜한 상품 조회
+    public List<ProductListResponseDTO> findLikedProducts(Long memberId){
+        return shopMapper.selectMyLikedProducts(memberId);
+    }
+
+    // 마이페이지(샵) 찜한 상품 삭제
+    public void deleteLikedProduct(Long memberId, Long productId){
+        shopMapper.deleteMyLikedProduct(memberId, productId);
+    }
+
+
+    // 마이페이지(샵) 마이리뷰 조회
+    public List<MyReviewListDTO> findMyReviews(Long id){
+        return shopMapper.selectMyReview(id);
+    }
 
 
 }

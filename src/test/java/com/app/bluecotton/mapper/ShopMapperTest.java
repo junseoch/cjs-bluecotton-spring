@@ -34,12 +34,12 @@ class ShopMapperTest {
 
 
     @Test
-    void selectProductReview() {
+    void selectProductReviewStatsTest() {
         Map<String,Object> reviewParams = new HashMap<>();
         reviewParams.put("id", 1L);
         reviewParams.put("type", null);      // photo면 사진 리뷰만, null이면 전체
         reviewParams.put("sort", "ratingHigh");
-        log.info("상품 리뷰 목록: {}", shopMapper.selectProductDetailReview(reviewParams));
+        log.info("상품 리뷰 목록: {}", shopMapper.selectProductReviewStats(reviewParams));
     }
 
 }

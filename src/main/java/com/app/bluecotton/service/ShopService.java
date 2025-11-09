@@ -22,4 +22,13 @@ public interface ShopService {
     // 상세 페이지 "리뷰 평점" 조회
     public ProductReviewStatsResponseDTO getProductReviewStats(Long id);
 
+    // 마이페이지(샵) 찜한 상품 조회
+    public List<ProductListResponseDTO> getLikedProducts(Long memberId);
+
+    // 마이페이지(샵) 찜한 상품 삭제
+    public void unLikeProduct(Long memberId, Long productId);
+
+    // 마이페이지(샵) 마이리뷰 조회
+    public List<MyReviewListDTO> getMyReviews(Long id);
+
 }

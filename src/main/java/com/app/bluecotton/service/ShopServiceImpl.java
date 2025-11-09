@@ -42,5 +42,20 @@ public class ShopServiceImpl implements ShopService {
         return shopDAO.findProductReviewStats(id);
     }
 
+    @Override
+    public List<ProductListResponseDTO> getLikedProducts(Long memberId) {
+        return shopDAO.findLikedProducts(memberId);
+    }
+
+    @Override
+    public void unLikeProduct(Long memberId, Long productId) {
+        shopDAO.deleteLikedProduct(memberId, productId);
+    }
+
+    @Override
+    public List<MyReviewListDTO> getMyReviews(Long id) {
+        return shopDAO.findMyReviews(id);
+    }
+
 
 }

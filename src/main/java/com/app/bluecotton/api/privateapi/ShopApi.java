@@ -62,10 +62,12 @@ public class ShopApi {
     @GetMapping("read/{id}/review/status")
     public ResponseEntity<ApiResponseDTO> getProductReviewStats(@PathVariable Long id) {
 
-        log.info("상세 페이지 '리뷰 평점' (통계) 조회 요청: {}",id);
+        log.info("상세 페이지 '리뷰 평점' 조회 요청: {}",id);
         ProductReviewStatsResponseDTO productReviewStats = shopService.getProductReviewStats(id);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponseDTO.of("상품 리뷰 평점 조회 성공", productReviewStats));
     }
+
+
 
 
 }
