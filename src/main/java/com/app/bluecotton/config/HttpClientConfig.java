@@ -24,7 +24,7 @@ public class HttpClientConfig {
         rf.setReadTimeout(Duration.ofSeconds(30));
 
         return builder
-                .requestFactory(() -> rf)   // ✅ deprecated API 대신 이 방식 사용
+                .requestFactory(() -> rf)
                 .build();
     }
 }

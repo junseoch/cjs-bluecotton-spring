@@ -12,6 +12,10 @@ public class PaymentVO {
     private PaymentStatus paymentStatus;
     private Date paymentCreateAt;
     private Long orderId;
+
+    private String merchantUid;
+    private String impUid;
+    private Long paidAmount;
 }
 
 
