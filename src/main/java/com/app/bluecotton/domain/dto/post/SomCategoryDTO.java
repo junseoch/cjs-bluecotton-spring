@@ -4,6 +4,9 @@ import lombok.Data;
 
 @Data
 public class SomCategoryDTO {
-    private Long somId;
+    private Long id;
     private String somCategory;
+    private String somTitle;
+
+    private Integer somDayDiff;
 }

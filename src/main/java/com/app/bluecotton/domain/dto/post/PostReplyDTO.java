@@ -10,11 +10,13 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostReplyDTO {
-    private Long replyId;
-    private String replyContent;
-    private Date replyCreateAt;
-    private Long replyLikeCount;
+    private Long id;
+    private String postReplyContent;
+    private Date postReplyCreateAt;
+    private Long postReplyLikeCount;
 
+    private Long memberId;
     private String memberNickname;
     private String memberProfileUrl;
+
 }

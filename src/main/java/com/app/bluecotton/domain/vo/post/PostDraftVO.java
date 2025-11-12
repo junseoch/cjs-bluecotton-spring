@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Data
 public class PostDraftVO {
-    private Long postDraftId;
+    private Long id;
     private String postDraftTitle;
     private String postDraftContent;
     private Date postDraftCreateAt;

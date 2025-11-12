@@ -1,5 +1,8 @@
 package com.app.bluecotton.domain.dto.post;
 
+import com.app.bluecotton.domain.dto.MemberResponseDTO;
+import com.app.bluecotton.domain.dto.post.PostCommentDTO;
+import com.app.bluecotton.domain.vo.post.PostVO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostDetailDTO {
-    private Long postId;
+    private Long id;
     private String postTitle;
     private String postContent;
     private String postImageUrl;
@@ -20,10 +23,11 @@ public class PostDetailDTO {
 
     private String memberNickname;
     private String memberProfileUrl;
+    private Long memberId;
 
     private Long postLikeCount;
     private Integer postIsLike;
 
-    // 댓글 포함
     private List<PostCommentDTO> comments;
+
 }

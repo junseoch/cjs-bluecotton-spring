@@ -14,11 +14,12 @@ import java.util.List;
 public interface PostService {
     //    게시물 목록
     List<PostMainDTO> getPosts(String somCategory, String orderType
-            , Long memberId);
+            , Long memberId, String q);
 
     //    게시물 등록
     void write(PostVO postVO, List<String> imageUrls);
 
+    //  카테고리 목록
     List<SomCategoryDTO> getJoinedCategories(Long memberId);
 
     //    게시물 삭제
@@ -38,9 +39,6 @@ public interface PostService {
 
     // 게시글 수정
     void modifyPost(PostVO postVO);
-
-    // 게시물 상세 조회
-    PostDetailDTO getPostDetail(Long postId, Long memberId);
 
     // 댓글 등록
     void insertComment(PostCommentVO postCommentVO);
@@ -62,5 +60,11 @@ public interface PostService {
 
     // 답글 좋아요
     void toggleReplyLike(Long ReplyId, Long memberId);
+
+    // 게시글 상세 조회
+    public PostDetailDTO selectTest(Long postId);
+
+    // 최근본글 추가
+    public void registerRecent(Long memberId, Long postId);
 
 }

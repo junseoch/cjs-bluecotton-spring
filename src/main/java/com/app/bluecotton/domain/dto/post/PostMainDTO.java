@@ -10,7 +10,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostMainDTO {
-    private Long postId;
+    private Long id;
     private String somCategory;
     private String somTitle;
     private Integer postSomDay;
