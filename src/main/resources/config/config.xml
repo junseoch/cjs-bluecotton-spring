@@ -38,6 +38,7 @@
 
         <!-- som -->
         <typeAlias type="com.app.bluecotton.domain.vo.som.SomVO" alias="SomVO" />
+        <typeAlias type="com.app.bluecotton.domain.vo.som.SomLikeVO" alias="SomLikeVO" />
         <typeAlias type="com.app.bluecotton.domain.vo.som.SomImageVO" alias="SomImageVO" />
         <typeAlias type="com.app.bluecotton.domain.vo.som.SomImageVO" alias="SomLikeVO" />
         <typeAlias type="com.app.bluecotton.domain.vo.som.SomReviewVO" alias="SomReviewVO" />

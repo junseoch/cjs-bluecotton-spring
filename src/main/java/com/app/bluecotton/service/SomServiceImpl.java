@@ -1,5 +1,6 @@
 package com.app.bluecotton.service;
 
+import com.app.bluecotton.domain.dto.MemberSomLeaderResponseDTO;
 import com.app.bluecotton.domain.dto.SomJoinResponseDTO;
 import com.app.bluecotton.domain.dto.SomReadResponseDTO;
 import com.app.bluecotton.domain.dto.SomResponseDTO;
@@ -24,6 +25,7 @@ public class SomServiceImpl implements SomService {
 
     private final SomDAO somDAO;
     private final SomImageService somImageService;
+    private final MemberService memberService;
 
     //  솜 등록
     @Override
@@ -38,17 +40,19 @@ public class SomServiceImpl implements SomService {
 
     //  솜 상세 조회
     @Override
-    public SomReadResponseDTO findById(Long somId) {
-        SomReadResponseDTO somResponseDTO = somDAO.findById(somId).map(SomReadResponseDTO::new).orElseThrow(() -> new SomException("솜을 불러오지 못했습니다"));
+    public SomResponseDTO findById(Long somId) {
+        SomResponseDTO somResponseDTO = somDAO.findById(somId).map(SomResponseDTO::new).orElseThrow(() -> new SomException("솜을 불러오지 못했습니다"));
         List<SomImageVO> somImages = somImageService.selectImagesBySomId(somId);
-        if(somImages.size() == 0){
+        if(somImages.isEmpty()){
             SomImageVO somImageVO = new SomImageVO();
             somImageVO.setSomImagePath("https://image-server.ideaflow.co.kr/uploads/1762700261.jpg");
             somImageVO.setSomId(somId);
             somImageVO.setSomImageName("1762700261.jpg");
             somImages.add(somImageVO);
         }
+        somResponseDTO.setMemberSomLeader(new MemberSomLeaderResponseDTO(memberService.getMemberById(somResponseDTO.getMemberId())));
         somResponseDTO.setSomCount(somDAO.readSomJoinList(somId).size());
+        somResponseDTO.setSomJoinList(somDAO.readSomJoinList(somId));
         somResponseDTO.setSomImageList(somImages);
 
         return somResponseDTO;
@@ -58,18 +62,21 @@ public class SomServiceImpl implements SomService {
     @Override
     public List<SomResponseDTO> findAllSom() {
         List<SomResponseDTO> somList = somDAO.findAllSom().stream().map((som) -> {
-            SomResponseDTO somResponse = new SomResponseDTO(som);
+            SomResponseDTO somResponseDTO = new SomResponseDTO(som);
             List<SomImageVO> somImages = somImageService.selectImagesBySomId(som.getId());
-            if(somImages.size() == 0){
+            if(somImages.isEmpty()){
                 SomImageVO somImageVO = new SomImageVO();
                 somImageVO.setSomImagePath("https://image-server.ideaflow.co.kr/uploads/1762700261.jpg");
                 somImageVO.setSomId(som.getId());
                 somImageVO.setSomImageName("1762700261.jpg");
                 somImages.add(somImageVO);
             }
-            somResponse.setSomCount(somDAO.readSomJoinList(som.getId()).size());
-            somResponse.setSomImageList(somImages);
-            return somResponse;
+            somResponseDTO.setMemberSomLeader(new MemberSomLeaderResponseDTO(memberService.getMemberById(somResponseDTO.getMemberId())));
+            log.info("{}", memberService.getMemberById(somResponseDTO.getMemberId()));
+            somResponseDTO.setSomCount(somDAO.readSomJoinList(som.getId()).size());
+            somResponseDTO.setSomJoinList(somDAO.readSomJoinList(som.getId()));
+            somResponseDTO.setSomImageList(somImages);
+            return somResponseDTO;
         }).toList();
 
         return somList;
@@ -78,18 +85,21 @@ public class SomServiceImpl implements SomService {
     @Override
     public List<SomResponseDTO> findByCategoryAndType(Map<String, Object> map){
         List<SomResponseDTO> somList = somDAO.findSomListByCategoryAndType(map).stream().map((som) -> {
-            SomResponseDTO somResponse = new SomResponseDTO(som);
+            SomResponseDTO somResponseDTO = new SomResponseDTO(som);
             List<SomImageVO> somImages = somImageService.selectImagesBySomId(som.getId());
-            if(somImages.size() == 0){
+            if(somImages.isEmpty()){
                 SomImageVO somImageVO = new SomImageVO();
                 somImageVO.setSomImagePath("https://image-server.ideaflow.co.kr/uploads/1762700261.jpg");
                 somImageVO.setSomId(som.getId());
                 somImageVO.setSomImageName("1762700261.jpg");
                 somImages.add(somImageVO);
             }
-            somResponse.setSomCount(somDAO.readSomJoinList(som.getId()).size());
-            somResponse.setSomImageList(somImages);
-            return somResponse;
+            log.info("{}", memberService.getMemberById(somResponseDTO.getMemberId()));
+            somResponseDTO.setMemberSomLeader(new MemberSomLeaderResponseDTO(memberService.getMemberById(somResponseDTO.getMemberId())));
+            somResponseDTO.setSomCount(somDAO.readSomJoinList(som.getId()).size());
+            somResponseDTO.setSomJoinList(somDAO.readSomJoinList(som.getId()));
+            somResponseDTO.setSomImageList(somImages);
+            return somResponseDTO;
         }).toList();
 
         return somList;

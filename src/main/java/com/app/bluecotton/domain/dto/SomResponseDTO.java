@@ -23,10 +23,12 @@ public class SomResponseDTO {
     private Date somEndDate;
     private Integer somLike;
     private String somContent;
-    private Long memberId;
     private Integer somCount;
+    private Long memberId;
 
     private List<SomImageVO> somImageList;
+    private List<SomJoinResponseDTO> somJoinList;
+    private MemberSomLeaderResponseDTO memberSomLeader;
 
     public SomResponseDTO(SomVO somVO) {
         this.id = somVO.getId();

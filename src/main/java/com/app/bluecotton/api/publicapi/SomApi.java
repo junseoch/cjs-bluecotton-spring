@@ -29,17 +29,23 @@ public class SomApi {
     @PostMapping("register")
     public ResponseEntity<ApiResponseDTO> registerSom(@RequestBody SomVO somVO) {
         SomJoinVO somJoinVO = new SomJoinVO();
+        somService.registerSom(somVO);
         somJoinVO.setSomId(somVO.getId());
         somJoinVO.setMemberId(somVO.getMemberId());
-        somService.registerSom(somVO);
         somService.registerSomJoin(somJoinVO);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponseDTO.of("솜이 등록되었습니다", somVO));
+    }
+
+    @PostMapping("join")
+    public ResponseEntity<ApiResponseDTO> joinSom(@RequestBody SomJoinVO somJoinVO) {
+        somService.registerSomJoin(somJoinVO);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponseDTO.of("솜 참여가 완료되었습니다."));
     }
 
     //  솜 상세 조회
     @GetMapping("read")
     public ResponseEntity<ApiResponseDTO> getSomById(@RequestParam Long somId) {
-        SomReadResponseDTO data = somService.findById(somId);
+        SomResponseDTO data = somService.findById(somId);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponseDTO.of("솜 상세페이지를 불러왔습니다",data));
     }
 

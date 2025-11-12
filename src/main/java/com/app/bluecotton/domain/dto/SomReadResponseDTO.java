@@ -23,6 +23,7 @@ public class SomReadResponseDTO {
     private Integer somLike;
     private String somContent;
     private Integer somCount;
+    private Long memberId;
 
     private List<SomImageVO> somImageList;
     private List<SomJoinResponseDTO> somJoinList;
@@ -38,5 +39,6 @@ public class SomReadResponseDTO {
         this.somEndDate = somVO.getSomEndDate();
         this.somLike = somVO.getSomLike();
         this.somContent = somVO.getSomContent();
+        this.memberId = somVO.getMemberId();
     }
 }

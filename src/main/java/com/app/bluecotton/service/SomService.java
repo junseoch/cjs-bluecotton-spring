@@ -15,7 +15,7 @@ public interface SomService {
     public void registerSom(SomVO somVO);
 
     //  솜 상세 조회
-    public SomReadResponseDTO findById(Long somId);
+    public SomResponseDTO findById(Long somId);
 
     public Integer selectSomMaxPage(Map<String, Object> map);
 

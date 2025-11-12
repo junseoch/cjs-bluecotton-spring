@@ -28,12 +28,12 @@ public class MemberSomLeaderResponseDTO implements Serializable {
         this.setMemberProvider("local");
     }
 
-    public MemberSomLeaderResponseDTO(MemberVO memberVO) {
-        this.id = memberVO.getId();
-        this.memberPicturePath = memberVO.getMemberPicturePath();
-        this.memberPictureName = memberVO.getMemberPictureName();
-        this.memberName = memberVO.getMemberName();
-        this.memberNickname = memberVO.getMemberNickname();
-        this.memberProvider = memberVO.getMemberProvider();
+    public MemberSomLeaderResponseDTO(MemberResponseDTO memberResponseDTO) {
+        this.id = memberResponseDTO.getId();
+        this.memberPicturePath = memberResponseDTO.getMemberPicturePath();
+        this.memberPictureName = memberResponseDTO.getMemberPictureName();
+        this.memberName = memberResponseDTO.getMemberName();
+        this.memberNickname = memberResponseDTO.getMemberNickname();
+        this.memberProvider = memberResponseDTO.getMemberProvider();
     }
 }

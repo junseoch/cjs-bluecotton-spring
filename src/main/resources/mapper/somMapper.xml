@@ -141,6 +141,32 @@
         WHERE SOM_ID = #{somId} AND MEMBER_ID = #{memberId}
     </delete>
 
+    <insert id="insertSomLike" parameterType="SomLikeVO">
+        INSERT INTO TBL_SOM_LIKE VALUES (SEQ_SOM_LIKE.NEXTVAL, #{somId}, #{memberId})
+    </insert>
+
+    <select id="selectSomLikeCount" parameterType="Long" resultType="Integer">
+        SELECT COUNT(ID)
+        FROM TBL_SOM_LIKE
+        WHERE SOM_ID = #{somId}
+    </select>
+
+    <select id="selectIsSomLike" resultType="Boolean" parameterType="SomLikeVO">
+        SELECT CASE
+        WHEN COUNT(ID) > 0 THEN 1
+        ELSE 0
+        END AS IS_LIKED
+        FROM TBL_SOM_LIKE
+        WHERE SOM_ID = #{somId}
+        AND MEMBER_ID = #{memberId}
+
+    </select>
+
+    <delete id="deleteSomLike" parameterType="SomVO">
+        DELETE TBL_SOM_LIKE
+        WHERE SOM_ID = #{somId} AND MEMBER_ID = #{memberId};
+    </delete>
+
     <resultMap id="SomCheckWithImagesMap" type="com.app.bluecotton.domain.dto.SomCheckResponseDTO">
         <id property="id" column="sc_id"/>
         <result property="somCheckIsChecked" column="sc_is_checked" javaType="boolean"/>
