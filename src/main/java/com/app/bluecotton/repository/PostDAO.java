@@ -70,7 +70,7 @@ public class PostDAO {
     /* ===================== 🟩 카테고리 / 수정 ===================== */
 
     public List<SomCategoryDTO> findJoinedCategories(Long memberId) {
-        return postMapper.findJoinedCategories(memberId);
+        return postMapper.findJoinedSomsByMemberId(memberId);
     }
 
     public PostModifyDTO findByIdForUpdate(Long id) {
@@ -80,7 +80,6 @@ public class PostDAO {
     public void update(PostVO postVO) {
         postMapper.update(postVO);
     }
-
 
     /* ===================== ❤️ 좋아요 ===================== */
 
