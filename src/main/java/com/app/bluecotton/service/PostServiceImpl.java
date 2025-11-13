@@ -5,6 +5,7 @@ import com.app.bluecotton.domain.vo.post.PostCommentVO;
 import com.app.bluecotton.domain.vo.post.PostDraftVO;
 import com.app.bluecotton.domain.vo.post.PostReplyVO;
 import com.app.bluecotton.domain.vo.post.PostVO;
+import com.app.bluecotton.exception.PostException;
 import com.app.bluecotton.repository.PostDAO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,12 @@ public class PostServiceImpl implements PostService {
     // 오버로딩: draftId까지 받는 버전 (등록 + 임시저장 자동삭제)
     @Transactional(rollbackFor = Exception.class)
     public void write(PostVO postVO, List<String> imageUrls, Long draftId) {
+
+        // 1일 1회 제한
+        int count = postDAO.existsTodayPostInSom(postVO.getMemberId(), postVO.getSomId());
+        if (count > 0) {
+            throw new PostException("이미 오늘 해당 솜에 게시글을 작성했습니다.");
+        }
 
         // 게시글 등록
         postDAO.insert(postVO);

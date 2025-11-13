@@ -11,6 +11,7 @@ public class PostWriteDTO {
     private Long memberId;
     private Long somId;
     private List<String> imageUrls;
+    private Long draftId;
 
     public PostVO postVO() {
         PostVO postVO = new PostVO();

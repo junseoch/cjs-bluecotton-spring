@@ -51,7 +51,7 @@ public interface PostMapper {
     PostDraftVO selectDraftById(Long id);
     void deleteDraftById(Long id);
 
-    List<SomCategoryDTO> findJoinedCategories(Long memberId);
+    List<SomCategoryDTO> findJoinedSomsByMemberId(Long memberId);
 
     PostModifyDTO findByIdForUpdate(@Param("id") Long id);
     void update(PostVO postVO);
