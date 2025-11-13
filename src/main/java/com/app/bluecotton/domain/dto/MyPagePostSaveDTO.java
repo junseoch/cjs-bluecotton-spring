@@ -16,12 +16,12 @@ public class MyPagePostSaveDTO {
     private Long id;
     private String postDraftTitle;
     private String somCategory;
-    private Date postCreateAt;
+    private Date postDraftCreateAt;
 
     public MyPagePostSaveDTO(PostDraftVO postDraftVO, SomVO somVO) {
         this.id = postDraftVO.getId();
         this.postDraftTitle = postDraftVO.getPostDraftTitle();
-        this.postCreateAt = postDraftVO.getPostDraftCreateAt();
+        this.postDraftCreateAt = postDraftVO.getPostDraftCreateAt();
         this.somCategory = somVO.getSomCategory();
 
     }

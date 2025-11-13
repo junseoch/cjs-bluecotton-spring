@@ -51,11 +51,9 @@
     <select id="readPostSave" parameterType="Long" resultType="com.app.bluecotton.domain.dto.MyPagePostSaveDTO">
         SELECT TBD.ID, TBD.POST_DRAFT_TITLE, TBD.POST_DRAFT_CREATE_AT, TBS.SOM_CATEGORY
         FROM TBL_POST_DRAFT TBD
-        JOIN TBL_SOM TBS
+        LEFT JOIN TBL_SOM TBS
         ON TBD.SOM_ID = TBS.ID
-        JOIN TBL_MEMBER TBM
-        ON TBD.MEMBER_ID = TBM.ID
-        WHERE TBM.ID = #{id}
+        WHERE TBD.MEMBER_ID = #{memberId}
     </select>
 
     <!--마이페이지 내가 최근에 본 글-->
