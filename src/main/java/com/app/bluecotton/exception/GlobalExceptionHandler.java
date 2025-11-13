@@ -45,6 +45,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponseDTO.of(e.getMessage()));
    }
 
+    //  Post 관련
+    // 1일 1회 제한 409오류 코드
+    @ExceptionHandler(PostException.class)
+    public ResponseEntity<ApiResponseDTO<Void>> handlePostException(PostException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(ApiResponseDTO.of(e.getMessage(), null));
+    }
 
     // 모든 예외 처리
     @ExceptionHandler(Exception.class)
