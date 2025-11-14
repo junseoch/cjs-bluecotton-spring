@@ -14,10 +14,10 @@ import java.util.List;
 public class MyPageSomDAO {
     private final MyPageSomMapper  myPageSomMapper;
 
-    //    마이페이지 솜 인증 추가
-    public void insertSomCheckWithImages(MyPageSomCheckDTO myPageSomCheckDTO) {
-        myPageSomMapper.insertSomCheckWithImages(myPageSomCheckDTO);
-    }
+//    //    마이페이지 솜 인증 추가
+//    public void insertSomCheckWithImages(MyPageSomCheckDTO myPageSomCheckDTO) {
+//        myPageSomMapper.insertSomCheckWithImages(myPageSomCheckDTO);
+//    }
     //    마이페이지 솜 리뷰 추가
     public void insertSomReview(SomReviewVO somReviewVO) {
         myPageSomMapper.insertSomReview(somReviewVO);

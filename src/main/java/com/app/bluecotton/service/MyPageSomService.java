@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface MyPageSomService {
 
+
     //    마이페이지 솜 인증 추가
     public void insertSomCheckWithImages(MyPageSomCheckDTO myPageSomCheckDTO);
     //    마이페이지 솜 리뷰 추가
