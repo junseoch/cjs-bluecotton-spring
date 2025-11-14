@@ -64,13 +64,11 @@ public class MyPageShopApi {
     }
 
     @PostMapping("review")
-    public ResponseEntity<ApiResponseDTO> createMyReview(@RequestBody MyPageReviewWriteDTO myPageReviewWriteDTO){
-        shopService.insertMyReview(myPageReviewWriteDTO);
+    public ResponseEntity<ApiResponseDTO> createMyReview(@RequestBody MyPageReviewWriteDTO myPageReviewWriteDTO) {
 
-        shopService.insertMyReviewImage(myPageReviewWriteDTO);
+        shopService.writeReview(myPageReviewWriteDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponseDTO.of("리뷰 등록 성공"));
-
     }
 
     @GetMapping("delivery/{memberId}")
@@ -86,6 +84,14 @@ public class MyPageShopApi {
         log.info("구매 취소 성공");
         shopService.deleteMyDeliveryProduct(id);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponseDTO.of("구매 취소 성공"));
+    }
+
+
+    @GetMapping("/review/exist/{productId}/{memberId}")
+    public ResponseEntity<ApiResponseDTO> existMyReview(@PathVariable Long productId, @PathVariable Long memberId){
+        log.info("리뷰 유효성 검사 성공");
+        int result = shopService.existProductReview(productId, memberId);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponseDTO.of("리뷰 작성 여부", result));
     }
 
 

@@ -27,6 +27,12 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
+    public ProductDetailResponseDTO getProductDetailLike(Long productId, Long memberId) {
+        toggleLike(memberId, productId);
+        return shopDAO.findProductDetailHeaderLike(productId, memberId);
+    }
+
+    @Override
     public ProductInfoDetailResponseDTO getProductDetailInfo(Long id) {
         return shopDAO.findProductDetailInfo(id);
     }
@@ -107,6 +113,27 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public void deleteMyDeliveryProduct(Long id) {
         shopDAO.deleteMyDeliveryProduct(id);
+    }
+
+    // 리뷰 유효성 검사
+    @Override
+    public int existProductReview(Long productId, Long memberId) {
+        return shopDAO.existProductReview(productId, memberId);
+    }
+
+    // 리뷰 작성
+    @Override
+    public void writeReview(MyPageReviewWriteDTO dto) {
+
+        // 백엔드에서 유효성 검사
+        int exist = shopDAO.existProductReview(dto.getProductId(), dto.getMemberId());
+        if (exist == 1) {
+            throw new IllegalStateException("이미 리뷰를 작성했습니다.");
+        }
+
+        // 문제 없다면 리뷰 저장
+        shopDAO.insertMyReview(dto);
+
     }
 
 

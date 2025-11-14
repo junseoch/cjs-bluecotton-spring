@@ -160,6 +160,26 @@
         WHERE TBP.ID = #{id}
     </select>
 
+
+    <!-- 상품 상세 페이지 찜하기 -->
+    <select id="selectProductDetailHeaderLike" parameterType="map" resultType="com.app.bluecotton.domain.dto.ProductDetailResponseDTO">
+        SELECT
+        TBP.ID,
+        (SELECT COUNT(*)
+        FROM TBL_PRODUCT_LIKE TBPL
+        WHERE TBPL.PRODUCT_ID = TBP.ID) AS PRODUCT_LIKE_COUNT ,
+        CASE
+        WHEN TBPL.ID IS NOT NULL THEN 1
+        ELSE 0
+        END AS PRODUCT_IS_LIKED
+        FROM TBL_PRODUCT TBP
+        LEFT JOIN TBL_PRODUCT_LIKE TBPL
+        ON TBP.ID = TBPL.PRODUCT_ID
+        AND TBPL.MEMBER_ID = #{memberId}
+        WHERE TBP.ID = #{productId}
+    </select>
+
+
     <!--  상품 상세 페이지 "정보" 조회 -->
     <select id="selectProductDetailInfo" parameterType="Long" resultType="com.app.bluecotton.domain.dto.ProductInfoDetailResponseDTO">
         SELECT
@@ -336,7 +356,7 @@
         FROM TBL_PRODUCT_IMAGE TBPI
         WHERE TBPI.PRODUCT_ID = TBP.ID
         AND TBPI.PRODUCT_IMAGE_TYPE = 'MAIN'
-        AND ROWNUM = 1)   AS PRODUCT_MAIN_IMAGE_URL,
+        AND ROWNUM = 1)  AS PRODUCT_MAIN_IMAGE_URL,
         TBO.ORDER_CREATE_AT,
         (SELECT COUNT(*)
         FROM TBL_ORDER
@@ -411,16 +431,14 @@
         WHERE ID = #{id}
     </delete>
 
+
     <!-- 리뷰하기 유효성 검사  -->
-    <select id="existProductReview" parameterType="map" resultType="">
-        SELECT
-        ID, PRODUCT_REVIEW_CREATE_AT, PRODUCT_REVIEW_RATING, PRODUCT_REVIEW_CONTENT, MEMBER_ID, PRODUCT_ID,
-        (
+    <select id="existProductReview" parameterType="map" resultType="int">
         SELECT
         CASE
         WHEN EXISTS (
         SELECT
-        ID, PRODUCT_REVIEW_CREATE_AT, PRODUCT_REVIEW_RATING, PRODUCT_REVIEW_CONTENT, MEMBER_ID, PRODUCT_ID
+        ID
         FROM TBL_PRODUCT_REVIEW
         WHERE
         PRODUCT_ID = #{productId}
@@ -431,9 +449,9 @@
         ELSE 0
         END
         FROM DUAL
-        ) AS PRODUCT_REVIEW_EXISTS
-        FROM TBL_PRODUCT_REVIEW
     </select>
+
+
 
 
 

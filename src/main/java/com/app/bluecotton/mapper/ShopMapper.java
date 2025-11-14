@@ -22,6 +22,11 @@ public interface ShopMapper {
     // 상세 페이지 상품 상단 조회
     public ProductDetailResponseDTO selectProductDetailHeader(Map<String,Object> likeParams);
 
+
+    // 상세 페이지 상품 상단 찜하기 로직
+    public ProductDetailResponseDTO selectProductDetailHeaderLike(Map<String,Object> like);
+
+
     // 상세 페이지 상품 정보 조회
     public ProductInfoDetailResponseDTO selectProductDetailInfo(Long id);
 
@@ -74,6 +79,7 @@ public interface ShopMapper {
 
 
     // 구매하기 유효성 검사
+    public int existProductReview(Map<String,Object> reviewParams);
 
 
 
