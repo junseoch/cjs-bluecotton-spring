@@ -2,26 +2,78 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.app.bluecotton.mapper.MyPageSomMapper">
 
-    <!--마이페이지 솜 인증 추가-->
-    <insert id="insertSomCheckWithImages" parameterType="com.app.bluecotton.domain.dto.MyPageSomCheckDTO">
-        <!-- 1️⃣ SOM_CHECK 먼저 삽입 -->
+    <!-- 마이페이지 솜 인증 조회 -->
+    <select id="readSomCheck"
+            parameterType="long"
+            resultType="com.app.bluecotton.domain.dto.MyPageSomCheckDTO">
+        SELECT
+        TBM.ID                    AS memberId,
+        TBSC.ID                   AS somCheckId,
+        TBSC.SOM_CHECK_IS_CHECKED AS somCheckIsChecked,
+        TBSC.SOM_CHECK_CONTENT    AS somCheckContent,
+        TBS.SOM_CATEGORY          AS somCategory,
+        TBS.SOM_START_DATE        AS somStartDate,
+        TBS.SOM_END_DATE          AS somEndDate
+        FROM TBL_SOM_CHECK TBSC
+        JOIN TBL_SOM TBS
+        ON TBSC.SOM_ID = TBS.ID
+        JOIN TBL_MEMBER TBM
+        ON TBSC.MEMBER_ID = TBM.ID
+        WHERE TBM.ID = #{id}
+    </select>
+
+    <!-- 마이페이지 솜 인증 추가 -->
+    <insert id="insertSomCheck"
+            parameterType="com.app.bluecotton.domain.dto.MyPageSomCheckDTO">
+
+        <selectKey keyProperty="somCheckId"
+                   resultType="long"
+                   order="BEFORE">
+            SELECT SEQ_SOM_CHECK.NEXTVAL FROM DUAL
+        </selectKey>
+
         INSERT INTO TBL_SOM_CHECK (
-        ID, SOM_CHECK_IS_CHECKED, SOM_CHECK_CONTENT, MEMBER_ID, SOM_ID
+        ID,
+        SOM_CHECK_IS_CHECKED,
+        SOM_CHECK_CONTENT,
+        MEMBER_ID,
+        SOM_ID
         )
         VALUES (
-        SEQ_SOM_CHECK.NEXTVAL,, #{somCheckIsCheckedYn}, #{somCheckContent}, #{memberId}, #{somId}
+        #{somCheckId},
+        #{somCheckIsCheckedYn},
+        #{somCheckContent},
+        #{memberId},
+        #{somId}
         )
-
-        <!-- 2️⃣ 이어서 이미지 리스트 삽입 (List 반복 처리) -->
-        <foreach collection="somCheckImageList" item="image">
-            INSERT INTO TBL_SOM_CHECK_IMAGE (
-            ID, SOM_CHECK_IMAGE_PATH, SOM_CHECK_IMAGE_NAME, SOM_CHECK_ID
-            )
-            VALUES (
-            #{image.id}, #{image.somCheckImagePath}, #{image.somCheckImageName}, #{id}
-            )
-        </foreach>
     </insert>
+
+    <!-- 마이페이지 솜 인증 이미지 추가 -->
+    <insert id="insertSomCheckImage"
+            parameterType="com.app.bluecotton.domain.dto.MyPageSomCheckImageDTO">
+
+        <selectKey keyProperty="id"
+                   resultType="long"
+                   order="BEFORE">
+            SELECT SEQ_SOM_CHECK_IMAGE.NEXTVAL FROM DUAL
+        </selectKey>
+
+        INSERT INTO TBL_SOM_CHECK_IMAGE (
+        ID,
+        SOM_CHECK_IMAGE_PATH,
+        SOM_CHECK_IMAGE_NAME,
+        SOM_CHECK_ID
+        )
+        VALUES (
+        #{id},
+        #{somCheckImagePath},
+        #{somCheckImageName},
+        #{somCheckId}
+        )
+    </insert>
+
+
+
 
     <!--마이페이지 솜 리뷰 추가-->
     <insert id="insertSomReview" parameterType="com.app.bluecotton.domain.vo.som.SomReviewVO">
@@ -36,16 +88,6 @@
         )
     </insert>
 
-    <!--마이페이지 솜 인증 호출-->
-    <select id="readSomCheck" parameterType="Long" resultType="com.app.bluecotton.domain.dto.MyPageSomCheckDTO">
-        SELECT TBM.ID, TBSC.ID, TBSC.SOM_CHECK_IS_CHECKED, TBSC.SOM_CHECK_CONTENT, TBS.SOM_CATEGORY, TBS.SOM_START_DATE, TBS.SOM_END_DATE
-        FROM TBL_SOM_CHECK TBSC
-        JOIN TBL_SOM TBS
-        ON TBSC.SOM_ID = TBS.ID
-        JOIN TBL_MEMBER TBM
-        ON TBSC.MEMBER_ID = TBM.ID
-        WHERE TBM.ID = #{id}
-    </select>
 
     <!--마이페이지 솜 리뷰 호출-->
     <select id="readSomReview" parameterType="Long" resultType="com.app.bluecotton.domain.dto.MyPageSomReviewDTO">
