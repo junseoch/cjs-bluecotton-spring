@@ -18,7 +18,7 @@ public class CartServiceImplTest {
         CartVO cartVO = new CartVO();
         cartVO.setMemberId(1L);
         cartVO.setProductId(2L);
-        cartVO.setQuantity(10);
+//        cartVO.setQuantity(10);
         cartService.addCart(cartVO);
     }
 
@@ -31,7 +31,7 @@ public class CartServiceImplTest {
     public void plusTest() {
         CartVO cartVO = new CartVO();
         cartVO.setProductId(1L);
-        cartVO.setQuantity(5);
+//        cartVO.setQuantity(5);
         cartService.updatePlusCart(cartVO);
 //        log.info("{}", cartService.updatePlusCart(cartVO));
     }

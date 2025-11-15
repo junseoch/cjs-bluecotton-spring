@@ -4,10 +4,10 @@ import com.app.bluecotton.domain.dto.ChatMemberResponseDTO;
 import com.app.bluecotton.domain.vo.chat.ChatMemberVO;
 import com.app.bluecotton.mapper.ChatMemberMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
 
 @Repository
 @RequiredArgsConstructor

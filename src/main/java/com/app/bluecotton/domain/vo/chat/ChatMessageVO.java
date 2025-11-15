@@ -11,6 +11,7 @@ public class ChatMessageVO {
     private String chatMessageType;
     private String chatMessageContent;
     private Integer chatMessageReadStatus;
+    private String memberName;
     private LocalDateTime chatMessageCreateAt;
 
     private Long chatMessageSenderId;

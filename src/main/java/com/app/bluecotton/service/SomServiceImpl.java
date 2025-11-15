@@ -4,6 +4,7 @@ import com.app.bluecotton.domain.dto.MemberSomLeaderResponseDTO;
 import com.app.bluecotton.domain.dto.SomJoinResponseDTO;
 import com.app.bluecotton.domain.dto.SomReadResponseDTO;
 import com.app.bluecotton.domain.dto.SomResponseDTO;
+import com.app.bluecotton.domain.vo.member.MemberProfileVO;
 import com.app.bluecotton.domain.vo.som.SomImageVO;
 import com.app.bluecotton.domain.vo.som.SomJoinVO;
 import com.app.bluecotton.domain.vo.som.SomLikeVO;
@@ -48,6 +49,8 @@ public class SomServiceImpl implements SomService {
         List<SomImageVO> somImages = somImageService.selectImagesBySomId(somId);
         Long currentMemberId = memberService.getMemberIdByMemberEmail(memberEmail);
         SomLikeVO somLikeVO = new SomLikeVO();
+        MemberSomLeaderResponseDTO memberSomLeaderResponseDTO = new MemberSomLeaderResponseDTO(memberService.getMemberById(somResponseDTO.getMemberId()));
+        MemberProfileVO memberProfileVO = memberService.getMemberProfileImage(somResponseDTO.getMemberId());
         somLikeVO.setSomId(somId);
         somLikeVO.setMemberId(currentMemberId);
         if(somImages.isEmpty()){
@@ -57,8 +60,10 @@ public class SomServiceImpl implements SomService {
             somImageVO.setSomImageName("1762700261.jpg");
             somImages.add(somImageVO);
         }
+        memberSomLeaderResponseDTO.setMemberPictureName(memberProfileVO.getMemberProfileName());
+        memberSomLeaderResponseDTO.setMemberPicturePath(memberProfileVO.getMemberProfilePath());
         somResponseDTO.setIsSomLike(somDAO.selectIsSomLike(somLikeVO));
-        somResponseDTO.setMemberSomLeader(new MemberSomLeaderResponseDTO(memberService.getMemberById(somResponseDTO.getMemberId())));
+        somResponseDTO.setMemberSomLeader(memberSomLeaderResponseDTO);
         somResponseDTO.setSomJoinList(somDAO.readSomJoinList(somId));
         somResponseDTO.setSomImageList(somImages);
 
@@ -92,6 +97,8 @@ public class SomServiceImpl implements SomService {
             List<SomImageVO> somImages = somImageService.selectImagesBySomId(som.getId());
             Long currentMemberId = memberService.getMemberIdByMemberEmail(map.get("memberEmail").toString());
             SomLikeVO somLikeVO = new SomLikeVO();
+            MemberSomLeaderResponseDTO memberSomLeaderResponseDTO = new MemberSomLeaderResponseDTO(memberService.getMemberById(som.getMemberId()));
+            MemberProfileVO memberProfileVO = memberService.getMemberProfileImage(som.getMemberId());
             somLikeVO.setSomId(som.getId());
             somLikeVO.setMemberId(currentMemberId);
             if(somImages.isEmpty()){
@@ -101,8 +108,10 @@ public class SomServiceImpl implements SomService {
                 somImageVO.setSomImageName("1762700261.jpg");
                 somImages.add(somImageVO);
             }
+            memberSomLeaderResponseDTO.setMemberPictureName(memberProfileVO.getMemberProfileName());
+            memberSomLeaderResponseDTO.setMemberPicturePath(memberProfileVO.getMemberProfilePath());
+            som.setMemberSomLeader(memberSomLeaderResponseDTO);
             som.setIsSomLike(somDAO.selectIsSomLike(somLikeVO));
-            som.setMemberSomLeader(new MemberSomLeaderResponseDTO(memberService.getMemberById(som.getMemberId())));
             som.setSomJoinList(somDAO.readSomJoinList(som.getId()));
             som.setSomImageList(somImages);
             return som;

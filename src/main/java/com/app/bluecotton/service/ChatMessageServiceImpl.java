@@ -1,5 +1,6 @@
 package com.app.bluecotton.service;
 
+import com.app.bluecotton.domain.dto.MemberResponseDTO;
 import com.app.bluecotton.domain.vo.chat.ChatMessageVO;
 import com.app.bluecotton.repository.ChatMessageDAO;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +15,17 @@ import java.util.Map;
 public class ChatMessageServiceImpl implements ChatMessageService {
 
     private final ChatMessageDAO chatMessageDAO;
+    private final MemberService memberService;
 
     @Override
     public List<ChatMessageVO> selectAll(ChatMessageVO chatMessageVO) {
-        return chatMessageDAO.selectAll(chatMessageVO);
+        List<ChatMessageVO> chatMessageVOList = chatMessageDAO.selectAll(chatMessageVO).stream().map((content) -> {
+            MemberResponseDTO memberResponseDTO = memberService.getMemberById(chatMessageVO.getChatMessageSenderId());
+            content.setMemberName(memberResponseDTO.getMemberName());
+
+            return content;
+        }).toList();
+        return chatMessageVOList;
     }
 
     @Override
@@ -36,7 +44,13 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         paramMap.put("chatId", chatId);
         paramMap.put("offset", offset);
         paramMap.put("limit", limit);
-        return chatMessageDAO.selectMessagesByChatId(paramMap);
+        List<ChatMessageVO> messages = chatMessageDAO.selectMessagesByChatId(paramMap).stream().map((content) -> {
+            MemberResponseDTO memberResponseDTO = memberService.getMemberById(content.getChatMessageSenderId());
+            content.setMemberName(memberResponseDTO.getMemberName());
+
+            return content;
+        }).toList();
+        return messages;
     }
 
 }
