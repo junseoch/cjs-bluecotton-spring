@@ -8,6 +8,7 @@ class BluecottonApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }
