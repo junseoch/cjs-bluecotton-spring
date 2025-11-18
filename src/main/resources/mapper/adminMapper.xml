@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.app.bluecotton.mapper.AdminOrderMapper">
+
+    <resultMap id="AdminOrderMap" type="com.app.bluecotton.domain.dto.admin.AdminOrderDTO">
+        <id     property="id"               column="ID" />
+        <result property="orderId"     column="ORDER_ID" />
+        <result property="memberId"        column="MEMBER_ID" />
+        <result property="memberNickname"  column="MEMBER_NICKNAME" />
+        <result property="memberEmail"     column="MEMBER_EMAIL" />
+        <result property="productName"     column="PRODUCT_NAME" />
+        <result property="orderQuantity"   column="ORDER_QUANTITY" />
+        <result property="orderTotalPrice" column="ORDER_TOTAL_PRICE" />
+        <result property="orderStatus"     column="ORDER_STATUS" />
+        <result property="orderCreateAt"   column="ORDER_CREATE_AT" />
+    </resultMap>
+
+    <select id="selectAllForAdmin" parameterType="Long" resultMap="AdminOrderMap">
+        SELECT
+            O.ID                                AS ORDER_ID,
+            O.MEMBER_ID                         AS MEMBER_ID,
+            M.MEMBER_NICKNAME                   AS MEMBER_NICKNAME,
+            M.MEMBER_EMAIL                      AS MEMBER_EMAIL,
+            P.PRODUCT_NAME                      AS PRODUCT_NAME,
+            O.ORDER_QUANTITY                    AS ORDER_QUANTITY,
+            O.ORDER_TOTAL_PRICE                 AS ORDER_TOTAL_PRICE,
+            O.ORDER_STATUS                      AS ORDER_STATUS,
+            O.ORDER_CREATE_AT                   AS ORDER_CREATE_AT
+        FROM TBL_ORDER O
+                 JOIN TBL_MEMBER  M ON M.ID = O.MEMBER_ID
+                 JOIN TBL_PRODUCT P ON P.ID = O.PRODUCT_ID
+        WHERE ID = #{orderId}
+    </select>
+</mapper>
