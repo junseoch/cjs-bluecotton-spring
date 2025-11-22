@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.bluecotton.mapper.AdminSomMapper">
+    <select id="selectConfirmByMember" resultType="com.app.bluecotton.domain.dto.AdminSomCheckResponseDTO">
+        SELECT
+        TSC.ID                 AS id,
+        TSC.MEMBER_ID          AS memberId,
+        TSC.SOM_ID             AS somId,
+        TBM.MEMBER_NICKNAME    AS memberNickname,
+        TBS.SOM_TITLE          AS somTitle,
+        TSC.SOM_CHECK_CONTENT  AS somCheckContent,
+        TSC.SOM_CHECK_IS_CHECKED AS somCheckIsChecked
+        FROM TBL_SOM_CHECK TSC
+        JOIN TBL_SOM TBS
+        ON TSC.SOM_ID = TBS.ID
+        JOIN TBL_MEMBER TBM
+        ON TSC.MEMBER_ID = TBM.ID
+        <where>
+            <if test="isChecked != null">
+                AND TSC.SOM_CHECK_IS_CHECKED =
+                <choose>
+                    <when test="isChecked">
+                        'Y'
+                    </when>
+                    <otherwise>
+                        'N'
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+        ORDER BY TSC.ID DESC
+    </select>
+
+    <resultMap id="adminSomCheckDetailMap"
+               type="com.app.bluecotton.domain.dto.AdminSomCheckDetailDTO">
+
+        <!-- 부모 데이터 -->
+        <id     property="id"                 column="ID"/>
+        <result property="somCheckIsChecked"  column="SOM_CHECK_IS_CHECKED"/>
+        <result property="somCheckContent"    column="SOM_CHECK_CONTENT"/>
+        <result property="memberId"           column="MEMBER_ID"/>
+        <result property="somId"              column="SOM_ID"/>
+        <result property="memberNickname"     column="MEMBER_NICKNAME"/>
+        <result property="memberEmail"        column="MEMBER_EMAIL"/>
+        <result property="somTitle"           column="SOM_TITLE"/>
+        <result property="somCategory"        column="SOM_CATEGORY"/>
+
+        <!-- 자식 이미지 리스트 -->
+        <collection property="images"
+                    ofType="com.app.bluecotton.domain.dto.MyPageSomCheckImageDTO">
+            <id     property="id"                 column="IMAGE_ID"/>
+            <result property="somCheckImagePath"  column="IMAGE_PATH"/>
+            <result property="somCheckImageName"  column="IMAGE_NAME"/>
+            <result property="somCheckId"         column="IMAGE_SOM_CHECK_ID"/>
+        </collection>
+    </resultMap>
+
+
+    <!-- SELECT 적용 -->
+    <select id="selectDetailSom" parameterType="long" resultMap="adminSomCheckDetailMap">
+        SELECT
+        TSC.ID,
+        TSC.SOM_CHECK_IS_CHECKED,
+        TSC.SOM_CHECK_CONTENT,
+        TSC.MEMBER_ID,
+        TSC.SOM_ID,
+        TBM.MEMBER_NICKNAME,
+        TBM.MEMBER_EMAIL,
+        TBS.SOM_TITLE,
+        TBS.SOM_CATEGORY,
+
+        TSI.ID AS IMAGE_ID,
+        TSI.SOM_CHECK_IMAGE_PATH AS IMAGE_PATH,
+        TSI.SOM_CHECK_IMAGE_NAME AS IMAGE_NAME,
+        TSI.SOM_CHECK_ID AS IMAGE_SOM_CHECK_ID
+
+        FROM TBL_SOM_CHECK TSC
+        JOIN TBL_MEMBER TBM ON TSC.MEMBER_ID = TBM.ID
+        JOIN TBL_SOM TBS ON TSC.SOM_ID = TBS.ID
+        LEFT JOIN TBL_SOM_CHECK_IMAGE TSI ON TSC.ID = TSI.SOM_CHECK_ID
+        WHERE TSC.ID = #{id}
+    </select>
+
+
+    <update id="updateSomCheckIsChecked" parameterType="Long">
+        UPDATE TBL_SOM_CHECK
+        SET SOM_CHECK_IS_CHECKED = 'Y'
+        WHERE ID = #{id}
+    </update>
+
+    <update id="bulkUpdateSomCheckIsChecked">
+        UPDATE TBL_SOM_CHECK
+        SET SOM_CHECK_IS_CHECKED = 'Y'
+        WHERE ID IN
+        <foreach collection="somCheckIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+</mapper>

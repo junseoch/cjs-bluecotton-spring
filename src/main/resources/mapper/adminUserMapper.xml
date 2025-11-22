@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.bluecotton.mapper.AdminMemberMapper">
+
+    <!-- 유저 전체    -->
+    <select id="selectAllMember" resultType="com.app.bluecotton.domain.dto.AdminAllMemberDTO" >
+        SELECT TBM.ID, TBM.MEMBER_EMAIL, MEMBER_SOCIAL_PROVIDER, MEMBER_NICKNAME, MEMBER_RANK, MEMBER_ADDRESS
+        FROM TBL_MEMBER TBM LEFT JOIN TBL_MEMBER_SOCIAL TBS ON TBM.ID = TBS.MEMBER_ID
+    </select>
+
+    <!-- 소셜 로그인 한 유저만 조회  -->
+    <select id="selectSocialLoginMember" resultType="com.app.bluecotton.domain.dto.AdminAllMemberDTO">
+        SELECT TBS.ID, MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_RANK, MEMBER_ADDRESS, MEMBER_SOCIAL_PROVIDER, MEMBER_SOCIAL_CONNECT_CREATE_AT, MEMBER_ID
+        FROM TBL_MEMBER_SOCIAL TBS LEFT JOIN TBL_MEMBER TBM ON TBS.MEMBER_ID = TBM.ID
+    </select>
+
+    <!-- 랭크만 조회 -->
+    <select id="selectRankByMember" resultType="memberVO">
+        SELECT TBM.ID, MEMBER_RANK, MEMBER_NICKNAME, MEMBER_EMAIL
+        FROM TBL_MEMBER TBM LEFT JOIN TBL_MEMBER_SOCIAL TBS ON TBM.ID = TBS.MEMBER_ID
+        WHERE MEMBER_RANK = #{memberRank}
+    </select>
+
+    <!-- 캔디 조회   -->
+    <select id="selectCandyByMember" resultType="memberVO">
+        SELECT TBM.ID, MEMBER_CANDY, MEMBER_NICKNAME, MEMBER_EMAIL
+        FROM TBL_MEMBER TBM LEFT JOIN TBL_MEMBER_SOCIAL TBS ON TBM.ID = TBS.MEMBER_ID
+        WHERE MEMBER_CANDY = #{memberCandy}
+    </select>
+
+    <!-- 상세 보기   -->
+    <select id="selectMemberByMemberId" parameterType="Long" resultType="com.app.bluecotton.domain.dto.AdminAllMemberDTO">
+        SELECT TBM.ID, TBM.MEMBER_EMAIL, MEMBER_NAME, MEMBER_SOCIAL_PROVIDER, MEMBER_PHONE, MEMBER_RANK, MEMBER_ADDRESS,MEMBER_BIRTH
+        FROM TBL_MEMBER TBM LEFT JOIN TBL_MEMBER_SOCIAL TBS ON TBM.ID = TBS.MEMBER_ID
+        WHERE TBM.ID= #{id}
+    </select>
+</mapper>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.app.bluecotton.mapper.AdminDeliveryMapper">
+
+    <!-- 주문별 상품 -->
+    <select id="selectOrderItemsByOrderId"
+            parameterType="long"
+            resultType="com.app.bluecotton.domain.dto.AdminOrderItemDTO">
+        SELECT
+        TBO.ID              AS id,
+        TBP.ID              AS productId,
+        TBP.PRODUCT_NAME    AS productName,
+        TBP.PRODUCT_PRICE   AS productPrice,
+        TBO.ORDER_QUANTITY  AS orderQuantity
+        FROM TBL_ORDER TBO
+        JOIN TBL_PRODUCT TBP ON TBO.PRODUCT_ID = TBP.ID
+        WHERE TBO.ID = #{id}
+    </select>
+
+    <!-- 배송 리스트 resultMap -->
+    <resultMap id="AdminDeliveryListResultMap"
+               type="com.app.bluecotton.domain.dto.AdminDeliveryListDTO">
+
+        <id property="id" column="DELIVERY_ID"/>
+        <result property="orderId" column="ORDER_ID"/>
+        <result property="memberId" column="MEMBER_ID"/>
+        <result property="memberNickname" column="MEMBER_NICKNAME"/>
+        <result property="memberCandy" column="MEMBER_CANDY"/>
+        <result property="productPurchaseType" column="PRODUCT_PURCHASE_TYPE"/>
+
+        <result property="deliveryReceiverName" column="DELIVERY_RECEIVER_NAME"/>
+        <result property="deliveryReceiverPhone" column="DELIVERY_RECEIVER_PHONE"/>
+        <result property="deliveryAddress" column="DELIVERY_ADDRESS"/>
+        <result property="deliveryRequest" column="DELIVERY_REQUEST"/>
+
+        <result property="paymentPrice" column="PAYMENT_PRICE"/>
+        <result property="deliveryStatus" column="DELIVERY_STATUS"/>
+        <result property="paymentCreateAt" column="PAYMENT_CREATE_AT"/>
+
+        <collection property="adminOrderItemDTOList"
+                    ofType="com.app.bluecotton.domain.dto.AdminOrderItemDTO"
+                    column="ORDER_ID"
+                    select="selectOrderItemsByOrderId"/>
+    </resultMap>
+
+
+    <!-- 배송 리스트 조회 -->
+    <select id="selectAdminDeliveryList" resultMap="AdminDeliveryListResultMap">
+        SELECT
+        D.ID                           AS DELIVERY_ID,
+        D.ORDER_ID                     AS ORDER_ID,
+        D.MEMBER_ID                           AS MEMBER_ID,
+        M.MEMBER_NICKNAME              AS MEMBER_NICKNAME,
+        MEMBER_CANDY                 AS MEMBER_CANDY,
+        P.PRODUCT_PURCHASE_TYPE        AS PRODUCT_PURCHASE_TYPE,
+
+        D.DELIVERY_RECEIVER_NAME       AS DELIVERY_RECEIVER_NAME,
+        D.DELIVERY_RECEIVER_PHONE      AS DELIVERY_RECEIVER_PHONE,
+        D.DELIVERY_ADDRESS             AS DELIVERY_ADDRESS,
+        D.DELIVERY_REQUEST             AS DELIVERY_REQUEST,
+
+        PAY.PAYMENT_PRICE              AS PAYMENT_PRICE,
+        D.DELIVERY_STATUS              AS DELIVERY_STATUS,
+        PAY.PAYMENT_CREATE_AT          AS PAYMENT_CREATE_AT
+
+        FROM TBL_DELIVERY D
+        LEFT JOIN TBL_ORDER   O   ON D.ORDER_ID   = O.ID
+        LEFT JOIN TBL_MEMBER  M   ON O.MEMBER_ID  = M.ID
+        LEFT JOIN TBL_PRODUCT P   ON O.PRODUCT_ID = P.ID
+        LEFT JOIN TBL_PAYMENT PAY ON PAY.ORDER_ID = O.ID
+        ORDER BY PAY.PAYMENT_CREATE_AT DESC NULLS LAST
+    </select>
+
+
+    <!-- 배송 상세 조회 -->
+    <select id="selectAdminDeliveryDetail"
+            parameterType="Long"
+            resultMap="AdminDeliveryListResultMap">
+
+        SELECT
+        D.ID                     AS DELIVERY_ID,
+        D.ORDER_ID               AS ORDER_ID,
+        M.ID                     AS MEMBER_ID,
+        M.MEMBER_NICKNAME        AS MEMBER_NICKNAME,
+        M.MEMBER_CANDY           AS MEMBER_CANDY,
+        P.PRODUCT_PURCHASE_TYPE  AS PRODUCT_PURCHASE_TYPE,
+        D.DELIVERY_RECEIVER_NAME AS DELIVERY_RECEIVER_NAME,
+        D.DELIVERY_RECEIVER_PHONE AS DELIVERY_RECEIVER_PHONE,
+        D.DELIVERY_ADDRESS       AS DELIVERY_ADDRESS,
+        D.DELIVERY_REQUEST       AS DELIVERY_REQUEST,
+        PAY.PAYMENT_PRICE        AS PAYMENT_PRICE,
+        D.DELIVERY_STATUS        AS DELIVERY_STATUS,
+        PAY.PAYMENT_CREATE_AT    AS PAYMENT_CREATE_AT
+        FROM TBL_DELIVERY D
+        JOIN TBL_ORDER O ON D.ORDER_ID = O.ID
+        JOIN TBL_MEMBER M ON O.MEMBER_ID = M.ID
+        JOIN TBL_PRODUCT P ON O.PRODUCT_ID = P.ID
+        JOIN TBL_PAYMENT PAY ON PAY.ORDER_ID = O.ID
+        WHERE D.ID = #{id}
+    </select>
+
+
+    <!-- 배송 업데이트 -->
+    <update id="updateDeliveryStatus">
+        UPDATE TBL_DELIVERY
+        SET DELIVERY_STATUS = #{deliveryStatus}
+        WHERE ID = #{id}
+    </update>
+
+</mapper>
