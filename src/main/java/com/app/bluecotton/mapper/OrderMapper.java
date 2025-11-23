@@ -3,6 +3,7 @@ package com.app.bluecotton.mapper;
 import com.app.bluecotton.domain.dto.*;
 import com.app.bluecotton.domain.vo.shop.OrderVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,28 +17,47 @@ public interface OrderMapper {
 
     public void insertOrderHeader(OrderCheckoutDTO orderCheckoutDTO);
 
-    public List<OrderDetailDTO> selectOrderDetailsByMemberIdAndOrderId(Long id, Long memberId);
-    public void insertOrderItems(Long orderId, List<OrderItemDTO> items);
+    public List<OrderDetailDTO> selectOrderDetailsByMemberIdAndOrderId(
+            @Param("id") Long id,
+            @Param("memberId") Long memberId
+    );
 
-    public Long selectProductPriceById(Long productId);
+    public void insertOrderItems(
+            @Param("orderId") Long orderId,
+            @Param("items") List<OrderItemDTO> items
+    );
 
-    public List<OrderVO> selectAllByMemberId (Long memberId);
+    public Long selectProductPriceById(@Param("productId") Long productId);
 
-    public Optional<OrderVO> selectByMemberIdAndOrderId (Long id, Long memberId);
+    public List<OrderVO> selectAllByMemberId(@Param("memberId") Long memberId);
+
+    public Optional<OrderVO> selectByMemberIdAndOrderId(
+            @Param("id") Long id,
+            @Param("memberId") Long memberId
+    );
 
     public void updateOrderStatus(OrderVO orderVO);
 
-    public void delete(Long id, Long memberId);
+    public void delete(
+            @Param("id") Long id,
+            @Param("memberId") Long memberId
+    );
 
-    public Integer findTotalCandyAmountForPendingOrders(Long memberId);
+    public Integer findTotalCandyAmountForPendingOrders(@Param("memberId") Long memberId);
 
-    public List<Long> findPendingCandyOrderIdsByMemberId(Long memberId);
+    public List<Long> findPendingCandyOrderIdsByMemberId(@Param("memberId") Long memberId);
 
-    public void updateOrderStatusForIds( List<Long> orderIds, String orderStatus);
+    public void updateOrderStatusForIds(
+            @Param("orderIds") List<Long> orderIds,
+            @Param("orderStatus") String orderStatus
+    );
 
-    public void detachOrderFromCart(Long memberId);
+    public void detachOrderFromCart(@Param("memberId") Long memberId);
 
-    public void insertOrderHeader(Long orderId, List<OrderItemDTO> items);
+    public void insertOrderHeader(
+            @Param("orderId") Long orderId,
+            @Param("items") List<OrderItemDTO> items
+    );
 
     public List<DailyRevenue> selectDailyRevenue();
 }

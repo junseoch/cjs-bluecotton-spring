@@ -1,23 +1,23 @@
-package com.app.bluecotton.domain.vo.shop;
+package com.app.bluecotton.domain.dto;
 
+import com.app.bluecotton.domain.vo.shop.ProductCategory;
+import com.app.bluecotton.domain.vo.shop.ProductPurchaseType;
+import com.app.bluecotton.domain.vo.shop.ProductType;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductVO {
+@Builder
+public class ProductListDTO {
     private Long id;
     private String productName;
     private Integer productPrice;
-    private Integer productStock;
     private ProductCategory productCategory;
     private ProductType productType;
     private ProductPurchaseType productPurchaseType;
-    private String productMainDescription;
-    private String productSubDescription ;
-    private String productWeight;
-    private String productMaterial;
-    private String productSize;
+    private String mainImageUrl;
 }

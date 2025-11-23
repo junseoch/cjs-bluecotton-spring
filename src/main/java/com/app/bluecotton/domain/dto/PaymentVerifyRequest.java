@@ -14,4 +14,9 @@ public class PaymentVerifyRequest {
     private String pgProvider;
     private String easyPayProvider;
     private Long memberId;
+
+    private String receiverName;
+    private String receiverPhone;
+    private String receiverAddress;
+    private String receiverRequest;
 }

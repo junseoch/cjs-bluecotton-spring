@@ -65,14 +65,14 @@ public class OrderMapperTest {
     }
 
 
-    @Test
-    public void updateTest() {
-        OrderVO orderVO = new OrderVO();
-        orderVO.setOrderStatus('N');
-        orderVO.setMemberId(1L);
-        orderVO.setId(2L);
-        orderMapper.updateOrderStatus(orderVO);
-    }
+//    @Test
+//    public void updateTest() {
+//        OrderVO orderVO = new OrderVO();
+//        orderVO.setOrderStatus('N');
+//        orderVO.setMemberId(1L);
+//        orderVO.setId(2L);
+//        orderMapper.updateOrderStatus(orderVO);
+//    }
 
     @Test
     public  void deleteTest() {

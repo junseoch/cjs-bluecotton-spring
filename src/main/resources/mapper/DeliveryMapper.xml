@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.app.bluecotton.mapper.DeliveryMapper">
+
+    <resultMap id="DeliveryResultMap" type="com.app.bluecotton.domain.vo.shop.DeliveryVO">
+        <id property="id" column="ID"/>
+        <result property="deliveryReceiverName" column="DELIVERY_RECEIVER_NAME"/>
+        <result property="deliveryReceiverPhone" column="DELIVERY_RECEIVER_PHONE"/>
+        <result property="deliveryAddress" column="DELIVERY_ADDRESS"/>
+        <result property="deliveryRequest" column="DELIVERY_REQUEST"/>
+        <result property="deliveryFee" column="DELIVERY_FEE"/>
+        <result property="memberId" column="MEMBER_ID"/>
+        <result property="productId" column="PRODUCT_ID"/>
+        <result property="orderId" column="ORDER_ID"/>
+        <result property="deliveryStatus" column="DELIVERY_STATUS"/>
+    </resultMap>
+
+    <insert id="insert"
+            parameterType="com.app.bluecotton.domain.vo.shop.DeliveryVO">
+        INSERT INTO TBL_DELIVERY (
+        ID,
+        ORDER_ID,
+        MEMBER_ID,
+        DELIVERY_RECEIVER_NAME,
+        DELIVERY_RECEIVER_PHONE,
+        DELIVERY_ADDRESS,
+        DELIVERY_REQUEST,
+        DELIVERY_STATUS
+        ) VALUES (
+        SEQ_DELIVERY.NEXTVAL,
+        #{orderId},
+        #{memberId},
+        #{deliveryReceiverName},
+        #{deliveryReceiverPhone},
+        #{deliveryAddress},
+        #{deliveryRequest},
+        #{deliveryStatus}
+        )
+    </insert>
+
+    <select id="existsByOrderId"
+            parameterType="long"
+            resultType="int">
+        SELECT COUNT(*)
+        FROM TBL_DELIVERY
+        WHERE ORDER_ID = #{orderId}
+    </select>
+
+    <select id="selectByMemberId" parameterType="long"
+            resultMap="DeliveryResultMap">
+        SELECT *
+        FROM TBL_DELIVERY
+        WHERE MEMBER_ID = #{memberId}
+        ORDER BY ID DESC
+    </select>
+
+</mapper>

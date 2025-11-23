@@ -1,6 +1,5 @@
 package com.app.bluecotton.repository;
 
-
 import com.app.bluecotton.domain.dto.*;
 import com.app.bluecotton.domain.vo.shop.OrderVO;
 import com.app.bluecotton.mapper.OrderMapper;
@@ -30,12 +29,10 @@ public class OrderDAO {
 
     public Long createIntegratedOrder(OrderCheckoutDTO orderCheckoutDTO) {
         orderMapper.insertOrderHeader(orderCheckoutDTO);
-
         Long orderId = orderCheckoutDTO.getId();
-
         List<OrderItemDTO> items = orderCheckoutDTO.getItems();
-        if(items!=null && !items.isEmpty()){
-            orderMapper.insertOrderHeader(orderId, items);
+        if(items != null && !items.isEmpty()) {
+            orderMapper.insertOrderItems(orderId, items);
         }
         return orderId;
     }
@@ -52,15 +49,19 @@ public class OrderDAO {
         return orderMapper.selectOrderDetailsByMemberIdAndOrderId(id, memberId);
     }
 
-    public void updateOrder(OrderVO orderVO) {
-        orderMapper.updateOrderStatus(orderVO);
+    public void updateOrderStatus(Long id, Long memberId, Character orderStatus) {
+        OrderVO vo = new OrderVO();
+        vo.setId(id);
+        vo.setMemberId(memberId);
+        vo.setOrderStatus(orderStatus);
+        orderMapper.updateOrderStatus(vo);
     }
 
     public void deleteOrder(Long id, Long memberId) {
         orderMapper.delete(id, memberId);
     }
 
-    public void  detachOrderFromCart(Long memberId) {
+    public void detachOrderFromCart(Long memberId) {
         orderMapper.detachOrderFromCart(memberId);
     }
 
@@ -68,13 +69,11 @@ public class OrderDAO {
         return orderMapper.findTotalCandyAmountForPendingOrders(memberId);
     }
 
-
     public List<Long> findPendingCandyOrderIdsByMemberId(Long memberId) {
         return orderMapper.findPendingCandyOrderIdsByMemberId(memberId);
     }
 
-    // 주문 상태 일괄 변경
-    public void updateOrderStatusForIds(List<Long> orderIds, String orderStatus){
+    public void updateOrderStatusForIds(List<Long> orderIds, String orderStatus) {
         orderMapper.updateOrderStatusForIds(orderIds, orderStatus);
     }
 }

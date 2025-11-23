@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -69,5 +70,16 @@ public class OrderApi {
 
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponseDTO.of("주문 삭제 완료"));
     }
+
+//    @PostMapping("order/delivery")
+//    public ResponseEntity<?> saveDelivery(@RequestBody DeliveryRequest dto) {
+//
+//        deliveryService.saveDelivery(dto);
+//
+//        return ResponseEntity.ok(
+//                Map.of("message", "배송 정보 저장 완료")
+//        );
+//    }
+
 
 }
