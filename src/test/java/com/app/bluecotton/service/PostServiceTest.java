@@ -57,9 +57,9 @@ class PostServiceTest {
     // 댓글 좋아요 (1~520)
     private void toggleCommentLikeRandom() {
 
-        for (long commentId = 1L; commentId <= 520L; commentId++) {
+        for (long commentId = 1L; commentId <= 630; commentId++) {
 
-            int maxLikes = (commentId >= 500 ? 4 : 15);
+            int maxLikes = (commentId >= 630 ? 4 : 15);
             int likeCount = random.nextInt(maxLikes + 1);
 
             for (int k = 0; k < likeCount; k++) {

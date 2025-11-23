@@ -49,7 +49,7 @@ public class PostPrivateApi {
     public ResponseEntity<ApiResponseDTO> withdrawPost(@RequestParam Long id) {
         postService.withdraw(id);
         return  ResponseEntity
-                .status(HttpStatus.CONFLICT)
+                .status(HttpStatus.OK)
                 .body(ApiResponseDTO.of("게시글 삭제 완료"));
     }
 
@@ -139,7 +139,7 @@ public class PostPrivateApi {
     @DeleteMapping("/comment/{commentId}")
     public ResponseEntity<ApiResponseDTO> deleteComment(@PathVariable Long commentId) {
         postService.deleteComment(commentId);
-        return ResponseEntity.status(HttpStatus.CONFLICT)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponseDTO.of("댓글 삭제 완료"));
     }
 
@@ -147,7 +147,7 @@ public class PostPrivateApi {
     @DeleteMapping("/reply/{replyId}")
     public ResponseEntity<ApiResponseDTO> deleteReply(@PathVariable Long replyId) {
         postService.deleteReplyById(replyId);
-        return ResponseEntity.status(HttpStatus.CONFLICT)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponseDTO.of("답글 삭제 완료"));
     }
 
