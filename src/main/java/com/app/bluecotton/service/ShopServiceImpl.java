@@ -76,16 +76,13 @@ public class ShopServiceImpl implements ShopService {
             Integer count = shopDAO.findLikeCount(memberId, productId);
 
             if (count != null && count > 0) {
-                // 찜 삭제
                 shopDAO.deleteLikedProduct(memberId, productId);
             } else {
-                // 찜 추가
                 shopDAO.insertMyLikedProduct(memberId, productId);
             }
         } catch (Exception e) {
-            throw new ShopException("찜");
+            throw new ShopException("찜하기 처리 중 오류가 발생했습니다.");
         }
-
     }
 
     @Override
@@ -100,11 +97,8 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public void modifyMyReview(Map<String, Object> modifyReview) {
-
-        // 1) 리뷰 본문 & 별점 수정
         shopDAO.updateMyReview(modifyReview);
 
-        // 2) 이미지가 넘어온 경우에만 이미지 갱신
         Long reviewId    = (Long) modifyReview.get("reviewId");
         String imagePath = (String) modifyReview.get("imagePath");
         String imageName = (String) modifyReview.get("imageName");
@@ -113,14 +107,10 @@ public class ShopServiceImpl implements ShopService {
                 imagePath != null && !imagePath.isBlank() &&
                 imageName != null && !imageName.isBlank()) {
 
-            // 기존 이미지 삭제
             shopDAO.deleteMyReviewImage(reviewId);
-            // 새 이미지 1장 등록
             shopDAO.insertMyReviewImageOnUpdate(modifyReview);
         }
     }
-
-    // 마이리뷰 삭제
     @Override
     public void deleteMyReview(Long id) {
         shopDAO.deleteMyReviewImage(id);

@@ -2,26 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.app.bluecotton.mapper.ShopMapper">
 
-<!-- 샵 메인 페이지 필터별 상품 조회  -->
     <select id="selectProductsByFilter" resultType="com.app.bluecotton.domain.dto.ProductListResponseDTO" parameterType="Map">
         SELECT
         TBP.ID,TBP.PRODUCT_NAME,TBP.PRODUCT_PRICE,TBP.PRODUCT_TYPE, TBP.PRODUCT_PURCHASE_TYPE,
-        <!--  리뷰 별점 평균-->
+
         (SELECT ROUND(AVG(TBPR.PRODUCT_REVIEW_RATING), 1)
         FROM TBL_PRODUCT_REVIEW TBPR
         WHERE TBPR.PRODUCT_ID = TBP.ID) AS PRODUCT_AVG_RATING,
 
-        <!-- 리뷰 총합 -->
         (SELECT COUNT(TBPR.ID)
         FROM TBL_PRODUCT_REVIEW TBPR
         WHERE TBPR.PRODUCT_ID = TBP.ID) AS PRODUCT_REVIEW_COUNT,
 
-        <!-- 찜 하기 총 개수 -->
         (SELECT COUNT(TBPL.PRODUCT_ID)
         FROM TBL_PRODUCT_LIKE TBPL
         WHERE TBPL.PRODUCT_ID = TBP.ID) AS PRODUCT_LIKE_COUNT,
 
-        <!-- 이미지 URL -->
         (SELECT TBPI.PRODUCT_IMAGE_PATH || TBPI.PRODUCT_IMAGE_NAME
         FROM TBL_PRODUCT_IMAGE TBPI
         WHERE TBPI.PRODUCT_ID = TBP.ID
@@ -38,12 +34,10 @@
 
         FROM TBL_PRODUCT TBP
         <where>
-            <!-- 상품 검색 -->
             <if test="q != null and q != ''">
                 AND (TBP.PRODUCT_NAME LIKE '%' || #{q} || '%')
             </if>
 
-            <!-- 카테고리: 다중 선택 OR 그룹 -->
             <if test="selection != 'all'">
                 <trim prefix="(" suffix=")" suffixOverrides="OR">
                     <if test="clothing   != null"> PRODUCT_CATEGORY = #{clothing}   OR </if>
@@ -57,13 +51,11 @@
                 </trim>
             </if>
 
-            <!-- 상품 타입  -->
             <trim prefix="AND (" suffix=")" suffixOverrides="OR">
                 <if test="newType != null"> PRODUCT_TYPE = #{newType} OR </if>
                 <if test="best    != null"> PRODUCT_TYPE = #{best}    OR </if>
             </trim>
 
-            <!-- 구매타입 -->
             <trim prefix="AND (" suffix=")" suffixOverrides="OR">
                 <if test="candy != null"> PRODUCT_PURCHASE_TYPE = #{candy} OR </if>
                 <if test="cash  != null"> PRODUCT_PURCHASE_TYPE = #{cash}  OR </if>
@@ -98,23 +90,23 @@
         </choose>
     </select>
     
-    <!-- 샵 메인 페이지 찜하기 추가 -->
-    <insert id="insertMyLikedProduct">
-        INSERT INTO TBL_PRODUCT_LIKE (ID, MEMBER_ID, PRODUCT_ID)
-        VALUES (SEQ_PRODUCT_LIKE.NEXTVAL, #{memberId}, #{productId})
-    </insert>
-
-    <!--  샵 메인 페이지 찜하기 삭제  -->
-    <delete id="deleteMyLikedProduct" >
-        DELETE FROM TBL_PRODUCT_LIKE
-        WHERE MEMBER_ID = #{memberId} AND PRODUCT_ID = #{productId}
-    </delete>
 
     <select id="selectLikeCount" resultType="Integer">
         SELECT COUNT(*)
         FROM TBL_PRODUCT_LIKE
         WHERE MEMBER_ID = #{memberId} AND PRODUCT_ID = #{productId}
     </select>
+
+    <insert id="insertMyLikedProduct">
+        INSERT INTO TBL_PRODUCT_LIKE (ID, MEMBER_ID, PRODUCT_ID)
+        VALUES (SEQ_PRODUCT_LIKE.NEXTVAL, #{memberId}, #{productId})
+    </insert>
+
+    <delete id="deleteMyLikedProduct" >
+        DELETE FROM TBL_PRODUCT_LIKE
+        WHERE MEMBER_ID = #{memberId} AND PRODUCT_ID = #{productId}
+    </delete>
+
 
     <!--  상품 상세 페이지 상단 조회 -->
     <select id="selectProductDetailHeader" parameterType="map" resultType="com.app.bluecotton.domain.dto.ProductDetailResponseDTO">
@@ -477,16 +469,17 @@
     <!-- 리뷰하기 유효성 검사  -->
     <select id="existProductReview" parameterType="map" resultType="int">
         SELECT
-        CASE
-        WHEN EXISTS (
-        SELECT ID
-        FROM TBL_PRODUCT_REVIEW
-        WHERE
-        PRODUCT_ID = #{productId}
-        AND
-        MEMBER_ID = #{memberId}
-        ) THEN 1
-        ELSE 0 END FROM DUAL
+            CASE
+                WHEN EXISTS (
+                    SELECT ID
+                    FROM TBL_PRODUCT_REVIEW
+                    WHERE PRODUCT_ID = #{productId}
+                    AND MEMBER_ID = #{memberId}
+                )
+                THEN 1
+                ELSE 0
+            END
+        FROM DUAL
     </select>
 
     <!-- 리뷰 댓글 신고-->
