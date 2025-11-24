@@ -50,7 +50,7 @@ public class MyPageInfoApi {
     public ResponseEntity<ApiResponseDTO<Object>> deleteMemberCascade(@RequestParam Long id){
         String data = "ㅇㅅㅇ";
         myPageInfoService.deleteMemberCascade(id);
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponseDTO.of("회원의 정보를 삭제/,했습니다", data));
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponseDTO.of("회원의 정보를 삭제했습니다", data));
     }
 
 }

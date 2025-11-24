@@ -64,5 +64,5 @@ public class MyPagePostServiceImpl implements MyPagePostService {
 
     //    내가 최근에 본 글 삭제
     @Override
-    public void deletePostRecent(Long id){ myPagePostDAO.deletePostRecent(id); };
+    public void deletePostRecent(Long memberId, Long postId){ myPagePostDAO.deletePostRecent(memberId, postId); };
 }

@@ -30,5 +30,5 @@ public interface MyPagePostMapper {
     //    내가 임시저장한 글 삭제
     public void deletePostSave(Long id);
     //    내가 최근에 본 글 삭제
-    public void deletePostRecent(Long id);
+    public void deletePostRecent(Long memberId, Long postId);
 }

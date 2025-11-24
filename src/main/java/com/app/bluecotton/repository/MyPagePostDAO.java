@@ -35,5 +35,5 @@ public class MyPagePostDAO {
     //    내가 임시저장한 글 삭제
     public void deletePostSave(Long id){ myPagePostMapper.deletePostSave(id); };
     //    내가 최근에 본 글 삭제
-    public void deletePostRecent(Long id){ myPagePostMapper.deletePostRecent(id); };
+    public void deletePostRecent(Long memberId, Long postId){ myPagePostMapper.deletePostRecent(memberId, postId); };
 }
