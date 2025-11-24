@@ -74,9 +74,9 @@ public class MyPagePostApi {
 
     //    내가 좋아요한 글 삭제
     @DeleteMapping("delete-post-like")
-    public ResponseEntity<ApiResponseDTO> deletePostLike(@RequestParam Long id){
+    public ResponseEntity<ApiResponseDTO> deletePostLike(@RequestParam Long postId, Long memberId){
         log.info("나의 좋아요를 취소합니다");
-        myPagePostService.deletePostLike(id);
+        postService.toggleLike(postId, memberId);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponseDTO.of("나의 좋아요가 취소되었습니다"));
     }
 
@@ -106,9 +106,9 @@ public class MyPagePostApi {
 
     //    내가 최근에 본 글 삭제
     @DeleteMapping("delete-post-recent")
-    public ResponseEntity<ApiResponseDTO> deletePostRecent(@RequestParam Long id){
+    public ResponseEntity<ApiResponseDTO> deletePostRecent(@RequestParam Long memberId, Long postId){
         log.info("내가 최근에 본 글을 불러옵니다");
-        myPagePostService.deletePostRecent(id);
+        myPagePostService.deletePostRecent(memberId, postId);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponseDTO.of("내가 최근에 본 글이 삭제되었습니다"));
     }
 }

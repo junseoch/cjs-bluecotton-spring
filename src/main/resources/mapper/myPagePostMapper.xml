@@ -62,7 +62,7 @@
 
     <!--마이페이지 내가 최근에 본 글-->
     <select id="readPostRecent" parameterType="Long" resultType="com.app.bluecotton.domain.dto.MyPagePostRecentDTO">
-        SELECT TBPR.ID, TBPR.POST_RECENT_CREATE_AT, TBP.POST_TITLE, TBS.SOM_CATEGORY
+        SELECT TBPR.ID, TBPR.POST_RECENT_CREATE_AT, TBP.POST_TITLE, TBS.SOM_CATEGORY, TBPR.POST_ID
         FROM TBL_POST_RECENT TBPR
         JOIN TBL_POST TBP
         ON TBPR.POST_ID = TBP.ID
@@ -104,9 +104,10 @@
     </delete>
 
     <!-- 내가 최근에 본 글 삭제 -->
-    <delete id="deletePostRecent" parameterType="Long">
+    <delete id="deletePostRecent" parameterType="map">
         DELETE FROM TBL_POST_RECENT
-        WHERE ID = #{id}
+        WHERE MEMBER_ID = #{memberId}
+        AND POST_ID = #{postId}
     </delete>
 
 </mapper>

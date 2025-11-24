@@ -19,11 +19,13 @@ public class MyPagePostRecentDTO {
     private String postTitle;
     private String somCategory;
     private Date postRecentCreateAt;
+    private Long postId;
 
     public MyPagePostRecentDTO(PostRecentVO postRecentVO, PostVO postVO, SomVO somVO, MemberVO memberVO){
         this.id = postRecentVO.getId();
         this.postTitle = postVO.getPostTitle();
         this.somCategory = somVO.getSomCategory();
         this.postRecentCreateAt = postRecentVO.getPostRecentCreateAt();
+        this.postId = postRecentVO.getPostId();
     }
 }
