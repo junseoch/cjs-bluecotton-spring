@@ -34,32 +34,37 @@ public class PaymentApi {
 
 
     @PostMapping("prepare")
-    public ResponseEntity<PortOneResponse> preparePayment(
+    public ResponseEntity<ApiResponseDTO<PaymentPrepareResponse>> preparePayment(
             @RequestBody @Valid PaymentPrepareRequest request) {
 
         log.info("Payment preparation request received: {}", request);
 
-        if (request.getMemberId() == null) {
-            request.setMemberId(100L);
-        }
-
         try {
-            PortOneResponse response = paymentService.preparePayment(request);
-            return ResponseEntity.ok(response);
+            PaymentPrepareResponse response = paymentService.preparePayment(request);
+            return ResponseEntity.ok(ApiResponseDTO.of("결제 준비 성공", response));
+
         } catch (RuntimeException e) {
             log.error("Payment preparation failed: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ApiResponseDTO.of("결제 준비 실패", null));
         }
     }
+
+
 
 
     @PostMapping("verify")
     public ResponseEntity<ApiResponseDTO<PortOneDTO>> verify(@RequestBody @Valid PaymentVerifyRequest request) {
-
-        paymentService.verifyPayment(request);
-
-        return ResponseEntity.ok(ApiResponseDTO.of("결제 검증 및 처리 성공", null));
+        try {
+            paymentService.verifyPayment(request);
+            return ResponseEntity.ok(ApiResponseDTO.of("결제 검증 및 처리 성공", null));
+        } catch (Exception e) {
+            log.error("결제 검증 실패: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ApiResponseDTO.of("결제 검증 실패", null));
+        }
     }
+
 
     @PostMapping("candy")
     public ResponseEntity<?> payWithCandy(

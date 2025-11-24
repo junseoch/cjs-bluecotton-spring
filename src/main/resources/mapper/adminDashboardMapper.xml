@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.bluecotton.mapper.AdminDashboardMapper">
+
+    <!-- 전체 사용자 수 -->
+    <select id="countAllUsers" resultType="int">
+        SELECT COUNT(*)
+        FROM TBL_MEMBER
+    </select>
+
+    <!-- 활성 솜 수 : SOM_STATUS = 'ACTIVE' 라고 가정 -->
+    <select id="countActiveSoms" resultType="int">
+        <![CDATA[
+    SELECT COUNT(*)
+    FROM TBL_SOM
+    WHERE SOM_START_DATE <= SYSDATE
+      AND SOM_END_DATE   >= SYSDATE
+    ]]>
+    </select>
+
+
+    <!-- 전체 게시글 수 -->
+    <select id="countAllPosts" resultType="int">
+        SELECT COUNT(*)
+        FROM TBL_POST
+    </select>
+
+    <!-- 전체 주문 건수 -->
+    <select id="countAllOrders" resultType="int">
+        SELECT COUNT(*)
+        FROM TBL_ORDER
+    </select>
+
+    <select id="selectRecentActivities"
+            resultType="com.app.bluecotton.domain.dto.AdminRecentActivityDTO">
+        <![CDATA[
+        SELECT *
+        FROM (
+        SELECT
+        P.ID                                      AS id,
+        '게시글'                                  AS type,
+        '새 게시글 작성'                          AS action,
+        M.MEMBER_NICKNAME,
+        TO_CHAR(P.POST_CREATE_AT, 'YYYY-MM-DD HH24:MI:SS') AS time,
+        P.POST_STATUS                            AS status
+        FROM TBL_POST P
+        JOIN TBL_MEMBER M ON M.ID = P.MEMBER_ID
+        ORDER BY P.POST_CREATE_AT DESC
+        )
+        WHERE ROWNUM <= 10
+        ]]>
+    </select>
+
+</mapper>

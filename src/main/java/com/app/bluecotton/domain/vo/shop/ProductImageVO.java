@@ -8,4 +8,5 @@ public class ProductImageVO {
     private String productImagePath;
     private String productImageName;
     private Long productId;
+    private ProductImageType productImageType;
 }

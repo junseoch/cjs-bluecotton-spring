@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.bluecotton.mapper.AdminPostReportMapper">
+
+    <insert id="insertPostReport" parameterType="com.app.bluecotton.domain.vo.post.PostReportVO">
+        INSERT INTO TBL_POST_REPORT (
+        ID,
+        POST_REPORT_CONTENT,
+        MEMBER_ID,
+        POST_ID,
+        POST_REPORT_CREATE_AT
+        ) VALUES (
+        SEQ_POST_REPORT.NEXTVAL,
+        #{postReportContent},
+        #{memberId},
+        #{postId},
+        SYSDATE
+        )
+    </insert>
+
+    <select id="selectReportedPostList" resultType="com.app.bluecotton.domain.dto.AdminReportedPostDTO">
+        SELECT
+        p.ID AS postId,
+        p.POST_TITLE AS postTitle,
+        m.MEMBER_NICKNAME AS writerNickname,
+        COUNT(r.ID) AS reportCount,
+        MAX(r.POST_REPORT_CREATE_AT) AS lastReportAt
+        FROM TBL_POST_REPORT r
+        JOIN TBL_POST p ON r.POST_ID = p.ID
+        JOIN TBL_MEMBER m ON p.MEMBER_ID = m.ID
+        GROUP BY p.ID, p.POST_TITLE, m.MEMBER_NICKNAME
+        ORDER BY lastReportAt DESC
+    </select>
+
+    <delete id="deleteByPostId" parameterType="long">
+        DELETE FROM TBL_POST_REPORT
+        WHERE POST_ID = #{postId}
+    </delete>
+</mapper>

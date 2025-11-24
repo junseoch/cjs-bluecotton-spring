@@ -34,8 +34,8 @@ public class SomResponseDTO {
     private MemberSomLeaderResponseDTO memberSomLeader;
 
     {
-        this.setSomTitleImagePath("https://image-server.ideaflow.co.kr/uploads/som/2025/11/10/default_post_25987fce-7bfb-43bb-8984-f4bae4daacb5.jpg");
-        this.setSomTitleImageName("som.jpg");
+        this.setSomTitleImagePath("https://image-server.ideaflow.co.kr/uploads/som/2025/11/10/default_post_25987fce-7bfb-43bb-8984-f4bae4daacb5.png");
+        this.setSomTitleImageName("default_post_25987fce-7bfb-43bb-8984-f4bae4daacb5.png");
     }
 
     public SomResponseDTO(SomVO somVO) {

@@ -111,7 +111,7 @@
 
     <update id="updateOrderStatus" parameterType="OrderVO">
         UPDATE TBL_ORDER
-        SET ORDER_STATUS ='N'
+        SET ORDER_STATUS = #{orderStatus}
         WHERE ID=#{id} AND MEMBER_ID =#{memberId}
     </update>
 

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.app.bluecotton.mapper.AdminPostCommentMapper">
+
+    <insert id="insertCommentReport"
+            parameterType="com.app.bluecotton.domain.vo.post.PostCommentReportVO">
+        INSERT INTO TBL_POST_COMMENT_REPORT (
+        ID,
+        POST_COMMENT_REPORT_CONTENT,
+        POST_COMMENT_ID,
+        MEMBER_ID,
+        POST_COMMENT_REPORT_CREATE_AT
+        ) VALUES (
+        SEQ_POST_COMMENT_REPORT.NEXTVAL,
+        #{postCommentReportContent},
+        #{postCommentId},
+        #{memberId},
+        SYSDATE
+        )
+    </insert>
+
+    <select id="selectReportedReplies"
+            resultType="com.app.bluecotton.domain.dto.ReportedReplyDTO">
+        SELECT
+        RPR.ID                      AS id,
+        RPR.POST_REPLY_ID           AS postReplyId,
+        PR.POST_COMMENT_ID          AS postCommentId,
+        PC.POST_ID                  AS postId,
+        P.POST_TITLE                AS postTitle,
+        PR.POST_REPLY_CONTENT       AS postReplyContent,
+        RU.MEMBER_NICKNAME          AS reportedUserNickname,
+        M.MEMBER_NICKNAME           AS reporterNickname,
+        RPR.POST_REPLY_REPORT_CONTENT AS postReplyReportContent,
+        SYSDATE                     AS reportDate,
+        'pending'                   AS status
+        FROM TBL_POST_REPLY_REPORT RPR
+        JOIN TBL_POST_REPLY PR     ON RPR.POST_REPLY_ID = PR.ID
+        JOIN TBL_POST_COMMENT PC   ON PR.POST_COMMENT_ID = PC.ID
+        JOIN TBL_POST P            ON PC.POST_ID = P.ID
+        JOIN TBL_MEMBER M          ON RPR.MEMBER_ID = M.ID
+        JOIN TBL_MEMBER RU         ON PR.MEMBER_ID = RU.ID
+        ORDER BY RPR.ID DESC
+    </select>
+
+
+    <select id="selectReportedComments"
+            resultType="com.app.bluecotton.domain.dto.ReportedCommentDTO">
+        SELECT
+        PCR.ID AS id,
+        PCR.POST_COMMENT_ID AS postCommentId,
+        PC.POST_COMMENT_CONTENT AS postCommentContent,
+        PCR.POST_COMMENT_REPORT_CONTENT AS postCommentReportContent,
+        PCR.MEMBER_ID AS reporterId,
+        M.MEMBER_NICKNAME AS reporterNickname
+        FROM TBL_POST_COMMENT_REPORT PCR
+        JOIN TBL_POST_COMMENT PC ON PCR.POST_COMMENT_ID = PC.ID
+        JOIN TBL_MEMBER M ON PCR.MEMBER_ID = M.ID
+        ORDER BY PCR.ID DESC
+    </select>
+
+    <delete id="deleteCommentLikesByCommentId" parameterType="long">
+        DELETE FROM TBL_POST_COMMENT_LIKE
+        WHERE POST_COMMENT_ID = #{commentId}
+    </delete>
+
+    <delete id="deleteCommentReportsByCommentId" parameterType="long">
+        DELETE FROM TBL_POST_COMMENT_REPORT
+        WHERE POST_COMMENT_ID = #{commentId}
+    </delete>
+
+    <delete id="deleteCommentByCommentId" parameterType="long">
+        DELETE FROM TBL_POST_COMMENT
+        WHERE ID = #{commentId}
+    </delete>
+
+    <delete id="deleteCommentLikesByPostId" parameterType="long">
+        DELETE FROM TBL_POST_COMMENT_LIKE
+        WHERE POST_COMMENT_ID IN (
+        SELECT ID FROM TBL_POST_COMMENT WHERE POST_ID = #{postId}
+        )
+    </delete>
+
+    <delete id="deleteCommentReportsByPostId" parameterType="long">
+        DELETE FROM TBL_POST_COMMENT_REPORT
+        WHERE POST_COMMENT_ID IN (
+        SELECT ID FROM TBL_POST_COMMENT WHERE POST_ID = #{postId}
+        )
+    </delete>
+
+    <delete id="deleteCommentsByPostId" parameterType="long">
+        DELETE FROM TBL_POST_COMMENT
+        WHERE POST_ID = #{postId}
+    </delete>
+
+
+    <delete id="deleteRepliesByCommentId" parameterType="long">
+        DELETE FROM TBL_POST_REPLY
+        WHERE POST_COMMENT_ID = #{commentId}
+    </delete>
+
+    <delete id="deleteRepliesByPostId" parameterType="long">
+        DELETE FROM TBL_POST_REPLY
+        WHERE POST_COMMENT_ID IN (
+        SELECT ID FROM TBL_POST_COMMENT WHERE POST_ID = #{postId}
+        )
+    </delete>
+
+    <delete id="deleteReplyById" parameterType="long">
+        DELETE FROM TBL_POST_REPLY
+        WHERE ID = #{replyId}
+    </delete>
+
+    <delete id="deleteReplyLikesByReplyId" parameterType="long">
+        DELETE FROM TBL_POST_REPLY_LIKE
+        WHERE POST_REPLY_ID = #{replyId}
+    </delete>
+
+    <delete id="deleteReplyReportsByReplyId" parameterType="long">
+        DELETE FROM TBL_POST_REPLY_REPORT
+        WHERE POST_REPLY_ID = #{replyId}
+    </delete>
+
+
+
+
+
+</mapper>

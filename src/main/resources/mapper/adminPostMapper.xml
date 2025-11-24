@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.app.bluecotton.mapper.AdminPostMapper">
+
+    <select id="selectAdminPostList"
+            resultType="com.app.bluecotton.domain.dto.post.AdminPostListDTO"><![CDATA[
+        SELECT
+            P.ID                      AS id,
+            P.POST_TITLE              AS postTitle,
+            P.POST_CREATE_AT          AS postCreateAt,
+            NVL(P.POST_READ_COUNT, 0) AS postReadCount,
+            NVL(PL.LIKE_COUNT, 0)     AS postLikeCount,
+            M.MEMBER_NICKNAME         AS memberNickname
+        FROM TBL_POST P
+        JOIN TBL_MEMBER M
+          ON P.MEMBER_ID = M.ID
+        LEFT JOIN (
+            SELECT
+                POST_ID,
+                COUNT(*) AS LIKE_COUNT
+            FROM TBL_POST_LIKE
+            GROUP BY POST_ID
+        ) PL
+          ON P.ID = PL.POST_ID
+        ORDER BY P.POST_CREATE_AT DESC
+    ]]></select>
+
+    <select id="selectPostDetail"
+            parameterType="long"
+            resultType="com.app.bluecotton.domain.dto.post.AdminPostDetailDTO"><![CDATA[
+        SELECT
+            P.ID                      AS id,
+            P.POST_TITLE              AS postTitle,
+            P.POST_CONTENT            AS postContent,
+            P.POST_CREATE_AT          AS postCreateAt,
+            NVL(P.POST_READ_COUNT, 0) AS postReadCount,
+            M.MEMBER_NICKNAME         AS memberNickname
+        FROM TBL_POST P
+        LEFT JOIN TBL_MEMBER M
+          ON P.MEMBER_ID = M.ID
+        WHERE P.ID = #{id}
+    ]]></select>
+
+    <select id="selectPostImages"
+            parameterType="long"
+            resultType="com.app.bluecotton.domain.dto.post.PostImageDTO"><![CDATA[
+        SELECT
+            ID              AS id,
+            POST_IMAGE_PATH AS postImagePath,
+            POST_IMAGE_NAME AS postImageName
+        FROM TBL_POST_IMAGE
+        WHERE POST_ID = #{id}
+    ]]></select>
+
+    <delete id="deletePostLikesByPostId" parameterType="long"><![CDATA[
+        DELETE FROM TBL_POST_LIKE
+        WHERE POST_ID = #{id}
+    ]]></delete>
+
+    <delete id="deletePostImagesByPostId" parameterType="long"><![CDATA[
+        DELETE FROM TBL_POST_IMAGE
+        WHERE POST_ID = #{id}
+    ]]></delete>
+
+    <delete id="deleteRecentPostsByPostId" parameterType="long"><![CDATA[
+        DELETE FROM TBL_POST_RECENT
+        WHERE POST_ID = #{id}
+    ]]></delete>
+
+    <delete id="delete" parameterType="long"><![CDATA[
+        DELETE FROM TBL_POST
+        WHERE ID = #{id}
+    ]]></delete>
+
+</mapper>

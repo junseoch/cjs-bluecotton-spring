@@ -11,7 +11,7 @@
         ID, PAYMENT_PRICE, PAYMENT_TYPE, PAYMENT_STATUS,
         PAYMENT_CREATE_AT, ORDER_ID, MERCHANT_UID, MEMBER_ID
         ) VALUES (
-        SEQ_PAYMENT.NEXTVAL, #{paymentPrice},
+        #{id}, #{paymentPrice},
         #{paymentType},
         #{paymentStatus},
         SYSTIMESTAMP,
@@ -50,9 +50,25 @@
         WHERE ID = #{memberId}
     </update>
 
+<!--    <select id="selectByMerchantUid" parameterType="string" resultType="PaymentVO">-->
+<!--        SELECT ID, PAYMENT_PRICE, PAYMENT_TYPE, PAYMENT_STATUS,-->
+<!--        PAYMENT_CREATE_AT, ORDER_ID, MERCHANT_UID, IMP_UID, PAID_AMOUNT-->
+<!--        FROM TBL_PAYMENT-->
+<!--        WHERE MERCHANT_UID = #{merchantUid}-->
+<!--    </select>-->
+
     <select id="selectByMerchantUid" parameterType="string" resultType="PaymentVO">
-        SELECT ID, PAYMENT_PRICE, PAYMENT_TYPE, PAYMENT_STATUS,
-        PAYMENT_CREATE_AT, ORDER_ID, MERCHANT_UID, IMP_UID, PAID_AMOUNT
+        SELECT
+        ID,
+        PAYMENT_PRICE,
+        PAYMENT_TYPE,
+        PAYMENT_STATUS,
+        PAYMENT_CREATE_AT,
+        ORDER_ID,
+        MEMBER_ID,
+        MERCHANT_UID,
+        IMP_UID,
+        PAID_AMOUNT
         FROM TBL_PAYMENT
         WHERE MERCHANT_UID = #{merchantUid}
     </select>
@@ -108,15 +124,41 @@
     </update>
 
 
+<!--    <select id="selectById" parameterType="Long" resultType="PaymentVO">-->
+<!--        SELECT ID, PAYMENT_PRICE, PAYMENT_TYPE, PAYMENT_STATUS, PAYMENT_CREATE_AT, ORDER_ID-->
+<!--        FROM TBL_PAYMENT-->
+<!--        WHERE ID = #{id}-->
+<!--    </select>-->
     <select id="selectById" parameterType="Long" resultType="PaymentVO">
-        SELECT ID, PAYMENT_PRICE, PAYMENT_TYPE, PAYMENT_STATUS, PAYMENT_CREATE_AT, ORDER_ID
+        SELECT
+        ID,
+        PAYMENT_PRICE,
+        PAYMENT_TYPE,
+        PAYMENT_STATUS,
+        PAYMENT_CREATE_AT,
+        ORDER_ID,
+        MEMBER_ID
         FROM TBL_PAYMENT
         WHERE ID = #{id}
     </select>
 
 
+<!--    <select id="selectByOrderId" parameterType="Long" resultType="PaymentVO">-->
+<!--        SELECT ID, PAYMENT_PRICE, PAYMENT_TYPE, PAYMENT_STATUS, PAYMENT_CREATE_AT, ORDER_ID-->
+<!--        FROM TBL_PAYMENT-->
+<!--        WHERE ORDER_ID = #{orderId}-->
+<!--        ORDER BY ID DESC-->
+<!--    </select>-->
+
     <select id="selectByOrderId" parameterType="Long" resultType="PaymentVO">
-        SELECT ID, PAYMENT_PRICE, PAYMENT_TYPE, PAYMENT_STATUS, PAYMENT_CREATE_AT, ORDER_ID
+        SELECT
+        ID,
+        PAYMENT_PRICE,
+        PAYMENT_TYPE,
+        PAYMENT_STATUS,
+        PAYMENT_CREATE_AT,
+        ORDER_ID,
+        MEMBER_ID
         FROM TBL_PAYMENT
         WHERE ORDER_ID = #{orderId}
         ORDER BY ID DESC

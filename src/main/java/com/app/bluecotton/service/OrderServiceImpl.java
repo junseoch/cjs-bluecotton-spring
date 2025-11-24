@@ -94,8 +94,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void updateOrder(OrderVO orderVO) {
-        orderDAO.updateOrder(orderVO);
+
     }
+
 
     @Override
     public void deleteOrder(Long id, Long memberId) {

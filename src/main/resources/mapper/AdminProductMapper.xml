@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.app.bluecotton.mapper.AdminProductMapper">
+
+    <resultMap id="ProductResultMap"
+               type="com.app.bluecotton.domain.vo.shop.ProductVO">
+        <id property="id" column="ID"/>
+        <result property="productName" column="PRODUCT_NAME"/>
+        <result property="productPrice" column="PRODUCT_PRICE"/>
+        <result property="productStock" column="PRODUCT_STOCK"/>
+        <result property="productCategory" column="PRODUCT_CATEGORY"/>
+        <result property="productType" column="PRODUCT_TYPE"/>
+        <result property="productPurchaseType" column="PRODUCT_PURCHASE_TYPE"/>
+        <result property="productMainDescription" column="PRODUCT_MAIN_DESCRIPTION"/>
+        <result property="productSubDescription" column="PRODUCT_SUB_DESCRIPTION"/>
+        <result property="productWeight" column="PRODUCT_WEIGHT"/>
+        <result property="productMaterial" column="PRODUCT_MATERIAL"/>
+        <result property="productSize" column="PRODUCT_SIZE"/>
+    </resultMap>
+
+    <resultMap id="ProductImageResultMap"
+               type="com.app.bluecotton.domain.vo.shop.ProductImageVO">
+        <id property="id" column="ID"/>
+        <result property="productImagePath" column="PRODUCT_IMAGE_PATH"/>
+        <result property="productImageName" column="PRODUCT_IMAGE_NAME"/>
+        <result property="productId" column="PRODUCT_ID"/>
+        <result property="productImageType"
+                column="PRODUCT_IMAGE_TYPE"
+                javaType="com.app.bluecotton.domain.vo.shop.ProductImageType"/>
+    </resultMap>
+
+    <insert id="insertProduct"
+            parameterType="com.app.bluecotton.domain.vo.shop.ProductVO">
+        <selectKey keyProperty="id"
+                   resultType="long"
+                   order="BEFORE">
+            SELECT SEQ_PRODUCT.NEXTVAL FROM DUAL
+        </selectKey>
+
+        INSERT INTO TBL_PRODUCT (
+        ID,
+        PRODUCT_NAME,
+        PRODUCT_PRICE,
+        PRODUCT_STOCK,
+        PRODUCT_CATEGORY,
+        PRODUCT_TYPE,
+        PRODUCT_PURCHASE_TYPE,
+        PRODUCT_MAIN_DESCRIPTION,
+        PRODUCT_SUB_DESCRIPTION,
+        PRODUCT_WEIGHT,
+        PRODUCT_MATERIAL,
+        PRODUCT_SIZE
+        ) VALUES (
+        #{id},
+        #{productName},
+        #{productPrice},
+        #{productStock},
+        #{productCategory},
+        #{productType},
+        #{productPurchaseType},
+        #{productMainDescription},
+        #{productSubDescription},
+        #{productWeight},
+        #{productMaterial},
+        #{productSize}
+        )
+    </insert>
+
+    <select id="selectProductById"
+            parameterType="long"
+            resultMap="ProductResultMap">
+        SELECT
+        ID,
+        PRODUCT_NAME,
+        PRODUCT_PRICE,
+        PRODUCT_STOCK,
+        PRODUCT_CATEGORY,
+        PRODUCT_TYPE,
+        PRODUCT_PURCHASE_TYPE,
+        PRODUCT_MAIN_DESCRIPTION,
+        PRODUCT_SUB_DESCRIPTION,
+        PRODUCT_WEIGHT,
+        PRODUCT_MATERIAL,
+        PRODUCT_SIZE
+        FROM TBL_PRODUCT
+        WHERE ID = #{id}
+    </select>
+
+    <select id="selectAllProducts"
+            resultMap="ProductResultMap">
+        SELECT
+        ID,
+        PRODUCT_NAME,
+        PRODUCT_PRICE,
+        PRODUCT_STOCK,
+        PRODUCT_CATEGORY,
+        PRODUCT_TYPE,
+        PRODUCT_PURCHASE_TYPE,
+        PRODUCT_MAIN_DESCRIPTION,
+        PRODUCT_SUB_DESCRIPTION,
+        PRODUCT_WEIGHT,
+        PRODUCT_MATERIAL,
+        PRODUCT_SIZE
+        FROM TBL_PRODUCT
+        ORDER BY ID DESC
+    </select>
+
+    <update id="updateProduct"
+            parameterType="com.app.bluecotton.domain.vo.shop.ProductVO">
+        UPDATE TBL_PRODUCT
+        SET
+        PRODUCT_NAME = #{productName},
+        PRODUCT_PRICE = #{productPrice},
+        PRODUCT_STOCK = #{productStock},
+        PRODUCT_CATEGORY = #{productCategory},
+        PRODUCT_TYPE = #{productType},
+        PRODUCT_PURCHASE_TYPE = #{productPurchaseType},
+        PRODUCT_MAIN_DESCRIPTION = #{productMainDescription},
+        PRODUCT_SUB_DESCRIPTION = #{productSubDescription},
+        PRODUCT_WEIGHT = #{productWeight},
+        PRODUCT_MATERIAL = #{productMaterial},
+        PRODUCT_SIZE = #{productSize}
+        WHERE ID = #{id}
+    </update>
+
+    <delete id="deleteProduct" parameterType="long">
+        DELETE FROM TBL_PRODUCT
+        WHERE ID = #{id}
+    </delete>
+
+    <insert id="insertProductImage"
+            parameterType="com.app.bluecotton.domain.vo.shop.ProductImageVO">
+        <selectKey keyProperty="id"
+                   resultType="long"
+                   order="BEFORE">
+            SELECT SEQ_PRODUCT_IMAGE.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO TBL_PRODUCT_IMAGE (
+        ID,
+        PRODUCT_IMAGE_PATH,
+        PRODUCT_IMAGE_NAME,
+        PRODUCT_ID,
+        PRODUCT_IMAGE_TYPE
+        ) VALUES (
+        #{id},
+        #{productImagePath},
+        #{productImageName},
+        #{productId},
+        #{productImageType}
+        )
+    </insert>
+
+    <select id="selectImagesByProductId"
+            parameterType="long"
+            resultMap="ProductImageResultMap">
+        SELECT
+        ID,
+        PRODUCT_IMAGE_PATH,
+        PRODUCT_IMAGE_NAME,
+        PRODUCT_ID,
+        PRODUCT_IMAGE_TYPE
+        FROM TBL_PRODUCT_IMAGE
+        WHERE PRODUCT_ID = #{id}
+        ORDER BY ID
+    </select>
+
+    <delete id="deleteImagesByProductId"
+            parameterType="long">
+        DELETE FROM TBL_PRODUCT_IMAGE
+        WHERE PRODUCT_ID = #{id}
+    </delete>
+
+</mapper>
