@@ -36,7 +36,6 @@ public class ShopServiceImpl implements ShopService {
         productDetailResponseDTO.setProductSubImages(subImages);
 
         return productDetailResponseDTO;
-
     }
 
 
